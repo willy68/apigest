@@ -106,7 +106,7 @@
 				$this->getUser($request);
 			}
 			else if ($this->method === 'PUT') {
-				$this->updatesUser($request);
+				$this->updateUser($request);
 			}
 			else if ($this->method === 'DELETE') {
 				$this->deleteUser($request);
@@ -229,7 +229,12 @@
 				exit('User not found on this server');
 			}
 
-			$token = $this->authenticate($request, $user->username, $user->email, $role->role, $user->password, 900, 0);
+			if ($request->getData('entreprise_id') !== $user->entreprise_id) {
+				header('HTTP/1.1 403 Not Forbiden');
+				exit('User is not from this compagny');
+			}
+
+			$token = $this->authenticate($request, $user->username, $user->email, $user->role, $user->password, 900, 0);
 			if ($token) {
 				header ( 'Content-Type: application/json; charset=UTF-8' );
 				$userJwt = ['id' => $user->id, 
