@@ -1,0 +1,22 @@
+{
+    "name": "willy68/mvcar",
+    "description": "Un petit mvc en php",
+    "type": "project",
+    "require": {
+        "spipu/html2pdf": "^5.2"
+    },
+    "license": "LGPL-3.0",
+    "authors": [
+        {
+            "name": "william Lety",
+            "email": "william.lety@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+		"autoload": {
+				 "psr-4": {
+				    "Library\\": "src/",
+				    "Applications\\": "Applications/"
+				 }
+		}
+}

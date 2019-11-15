@@ -1,0 +1,5 @@
+# git ignore tous les fichiers
+*
+# sauf celui-ci
+!.gitignore
+

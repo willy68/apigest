@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<routes>
+    <route url="entreprise/([0-9]+)/user/login" module="user" action="login" vars="entreprise_id"/>
+    <route url="entreprise/([0-9]+)/user(\?.+=.+)*" module="user" action="list" vars="entreprise_id,params"/>
+    <route url="/user/(\?.+=.+)*" module="user" action="list" vars="params"/>
+    <route url="entreprise/([0-9]+)/user/([0-9]+)" module="user" action="by_id" vars="entreprise_id,id"/>
+</routes>
