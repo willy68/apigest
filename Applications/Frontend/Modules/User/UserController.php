@@ -72,7 +72,6 @@
 			}
 
 			$user = new \User();
-			$role = \Role::find_by_role(array( 'role' => $request->postData('role')));
 
 			$pwd = password_hash($request->postData('username').$request->postData('password'), PASSWORD_BCRYPT, ["cost" => 8]);
 
@@ -80,7 +79,7 @@
 								'username' => $request->postData("username"),
 								'email' => $request->postData("email"),
 								'password' => $pwd,
-								'role_id' => $role->id);
+								'role' => $request->postData('role')));
 
 			if ($user->save())
 			{
