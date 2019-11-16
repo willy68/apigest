@@ -1,0 +1,15 @@
+{
+  "sqltools.connections": [
+    {
+      "database": "paysagest",
+      "dialect": "MySQL",
+      "isActive": true,
+      "isConnected": true,
+      "name": "paysagest",
+      "password": "wil2510",
+      "port": 3306,
+      "server": "localhost",
+      "username": "root"
+    }
+  ]
+}

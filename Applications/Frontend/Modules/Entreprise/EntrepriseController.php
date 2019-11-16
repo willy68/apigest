@@ -4,33 +4,33 @@
 	class EntrepriseController extends \Applications\Frontend\BackController
 	{
 
-		public function beforeList(\Library\HTTPRequest $request)
+	/*	public function beforeList(\Library\HTTPRequest $request)
 		{
-			//Test if user can list users with token
+			//Test if user can list Entreprises with token
 			if ($this->method === 'GET') {
 				if (!$this->isAuthorized()) {
 					header('HTTP/1.1 401 Unauthorized');
 					exit('Utilisateur non authentifié');
 				}
 			}
-		}
+		}*/
 
 		public function executeList(\Library\HTTPRequest $request)
 		{
 			if($this->method === 'GET') {
-				$this->getUsersList($request);
+				$this->getEntreprisesList($request);
 			}
 			else if ($this->method === 'POST') {
-				$this->createUser($request);
+				$this->createEntreprise($request);
 			}
 		}
 
-		private function getUsersList(\Library\HTTPRequest $request)
+		private function getEntreprisesList(\Library\HTTPRequest $request)
 		{
 			$options = array();
 
-			if ($request->getExists('entreprise_id')) {
-				$options['entreprise_id'] = $request->getData('entreprise_id');
+			if ($request->getExists('id')) {
+				$options['id'] = $request->getData('id');
 			}
 
 			if ($request->getExists('limit')) {
@@ -41,18 +41,18 @@
 				$options['order'] = $request->getData('order');
 			}
 
-			$users = \User::all($options);
+			$entreprises = \Entreprise::all($options);
 
-			if (empty($users))
+			if (empty($entreprises))
 			{
 				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('Users not found on this server');
+				$this->page->setOutput('Aucunes entreprises trouvées sur ce serveur');
 				return;
 			}
 
 			$i = 0;
-			foreach ( $users as $user ) {
-				$js = $user->to_json ();
+			foreach ( $entreprises as $entreprise ) {
+				$js = $entreprise->to_json ();
 				if ($i !== 0)
 					$json .= "," . $js;
 				else
@@ -63,28 +63,34 @@
 			$this->page->setOutput("[" . $json . "]");
 		}
 
-		private function createUser(\Library\HTTPRequest $request)
+		private function createEntreprise(\Library\HTTPRequest $request)
 		{
-			$user = \User::find_by_email(array( 'email' => $request->postData('email')));
-			if ($user) {
+			$entreprise = \Entreprise::find_by_siret(array( 'siret' => $request->postData('siret')));
+			if ($entreprise) {
 				header('HTTP/1.1 403 Forbiden');
-				exit ('Email ' . $request->postData('email') . ' allready exists');
+				exit ('L\'entreprise ' . $request->postData('siret') . ' existe déjà');
 			}
 
-			$user = new \User();
+			$entreprise = new \Entreprise();
 
-			$pwd = password_hash($request->postData('username').$request->postData('password'), PASSWORD_BCRYPT, ["cost" => 8]);
+			$entreprise->set_attributes(array('siret' => $request->postData("siret"),
+								'nom' => $request->postData("nom"),
+								'ape' => $request->postData("ape"),
+								'tva_intracom' => $request->postData('tva_intracom'),
+								'adresse' => $request->postData('role'),
+								'suite_adresse' => $request->postData("suite_adresse"),
+								'cp' => $request->postData('cp'),
+								'ville' => $request->postData('ville'),
+								'tel' => $request->postData('tel'),
+								'portable' => $request->postData('portable'),
+								'email' => $request->postData('email'),
+								'regime_commercial' => $request->postData('regime_commercial')
+							));
 
-			$user->set_attributes(array('entreprise_id' => $request->postData("entreprise_id"),
-								'username' => $request->postData("username"),
-								'email' => $request->postData("email"),
-								'password' => $pwd,
-								'role' => $request->postData('role')));
-
-			if ($user->save())
+			if ($entreprise->save())
 			{
 				header ( 'Content-Type: application/json; charset=UTF-8' );
-				$this->page->setOutput($user->to_json());
+				$this->page->setOutput($entreprise->to_json());
 			} else {
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
@@ -93,7 +99,7 @@
 
 		public function beforeBy_id(\Library\HTTPRequest $request)
 		{
-			//Test if user can get, update or delete a user with token
+			//Test if Entreprise can get, update or delete a Entreprise with token
 			if (!$this->isAuthorized()) {
 				header('HTTP/1.1 401 Unauthorized');
 				exit('Utilisateur non authentifié');
@@ -103,52 +109,52 @@
 		public function executeBy_id(\Library\HTTPRequest $request)
 		{
 			if($this->method === 'GET') {
-				$this->getUser($request);
+				$this->getEntreprise($request);
 			}
 			else if ($this->method === 'PUT') {
-				$this->updateUser($request);
+				$this->updateEntreprise($request);
 			}
 			else if ($this->method === 'DELETE') {
-				$this->deleteUser($request);
+				$this->deleteEntreprise($request);
 			}
 		}
 
-		private function getUser(\Library\HTTPRequest $request)
+		private function getEntreprise(\Library\HTTPRequest $request)
 		{
 			try {
-				$user = \User::find($request->getData('id'));
+				$entreprise = \Entreprise::find($request->getData('id'));
 			}
 			catch(\ActiveRecord\RecordNotFound $e)
 			{
 				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('User not found on this server');
+				$this->page->setOutput('Entreprise not found on this server');
 				return;
 			}
 
-			$json = $user->to_json();
+			$json = $entreprise->to_json();
 
 			header ( 'Content-Type: application/json; charset=UTF-8' );
 			$this->page->setOutput($json);
 
 		}
 
-		private function updateUser(\Library\HTTPRequest $request)
+		private function updateEntreprise(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData('id');
 
 			try {
-				$user = \User::find($id);
+				$entreprise = \Entreprise::find($id);
 			}
 			catch(\ActiveRecord\RecordNotFound $e)
 			{
 				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('User not found on this server');
+				$this->page->setOutput('Entreprise not found on this server');
 				return;
 			}
-			if ($user->update_attributes($request->post()))
+			if ($entreprise->update_attributes($request->post()))
 			{
 				header ( 'Content-Type: application/json; charset=UTF-8' );
-				$this->page->setOutput($user->to_json());
+				$this->page->setOutput($entreprise->to_json());
 			} else {
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
@@ -156,23 +162,23 @@
 			
 		}
 		
-		private function deleteUser(\Library\HTTPRequest $request)
+		private function deleteEntreprise(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData('id');
 
 			try {
-				$user = \User::find($id);
+				$entreprise = \Entreprise::find($id);
 			}
 			catch(\ActiveRecord\RecordNotFound $e)
 			{
 				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('User not found on this server');
+				$this->page->setOutput('Entreprise not found on this server');
 				return;
 			}
 			
-			if ($user->delete()) {
+			if ($entreprise->delete()) {
 				header ( 'Content-Type: application/json; charset=UTF-8' );
-				$this->page->setOutput($user->to_json());
+				$this->page->setOutput($entreprise->to_json());
 			} else {
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
@@ -180,75 +186,45 @@
 			
 		}
 
-		public function beforeBy_username(\Library\HTTPRequest $request)
+		public function beforeBy_name(\Library\HTTPRequest $request)
 		{
-			//Test if user can get, update or delete a user with token
+			//Test if Entreprise can get, update or delete a Entreprise with token
 			if (!$this->isAuthorized()) {
 				header('HTTP/1.1 401 Unauthorized');
 				exit('Utilisateur non authentifié');
 			}
 		}
 
-		public function executeBy_username(\Library\HTTPRequest $request)
+		public function executeBy_name(\Library\HTTPRequest $request)
 		{
 			if($this->method === 'GET') {
-				$this->getUserBy_username($request);
+				$this->getEntrepriseBy_name($request);
 			}
 /*			else if ($this->method === 'PUT') {
-				$this->updatesUser($request);
+				$this->updatesEntreprise($request);
 			}
 			else if ($this->method === 'DELETE') {
-				$this->deleteUser($request);
+				$this->deleteEntreprise($request);
 			}*/
 		}
 
-		private function getUserBy_username(\Library\HTTPRequest $request)
+		private function getEntrepriseBy_name(\Library\HTTPRequest $request)
 		{
 			try {
-				$user = \User::find_by_username(array( 'username' => $request->getData('username')));
+				$entreprise = \Entreprise::find_by_name(array( 'nom' => $request->getData('nom')));
 			}
 			catch(\ActiveRecord\RecordNotFound $e)
 			{
 				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('User not found on this server');
+				$this->page->setOutput('Entreprise not found on this server');
 				return;
 			}
 
-			$json = $user->to_json();
+			$json = $entreprise->to_json();
 
 			header ( 'Content-Type: application/json; charset=UTF-8' );
 			$this->page->setOutput($json);
 
-		}
-
-		public function executeLogin(\Library\HTTPRequest $request)
-		{
-			$user = \User::find_by_email(array( 'email' => $request->postData('email')));
-			if (!$user) {
-				header('HTTP/1.1 404 Not Found');
-				exit('User not found on this server');
-			}
-
-			if ($request->getData('entreprise_id') !== $user->entreprise_id) {
-				header('HTTP/1.1 403 Not Forbiden');
-				exit('User is not from this compagny');
-			}
-
-			$token = $this->authenticate($request, $user->username, $user->email, $user->role, $user->password, 900, 0);
-			if ($token) {
-				header ( 'Content-Type: application/json; charset=UTF-8' );
-				$userJwt = ['id' => $user->id, 
-							'username' => $user->username, 
-							'email' => $user->email, 
-							'role' => $user->role, 
-							'token' => $token];
-				$json = json_encode($userJwt);
-				$this->page->setOutput($json);
-			}
-			else {
-				header('HTTP/1.1 401 Unauthorized');
-				exit('Authentication failed');
-			}
 		}
 
 	}
