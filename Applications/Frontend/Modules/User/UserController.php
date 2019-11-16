@@ -91,6 +91,37 @@
 			}
 		}
 
+		public function executeRoleList(\Library\HTTPRequest $request) {
+			if ($this->method === 'GET') {
+				try {
+					$roles = \Role::all();
+				} catch(\ActiveRecord\RecordNotFound $e) {
+					header('HTTP/1.1 404 Not Found');
+					$this->page->setOutput('User role not found on this server');
+					return;
+				}
+
+				if (empty($roles))
+				{
+					header('HTTP/1.1 404 Not Found');
+					$this->page->setOutput('User role not found on this server');
+					return;
+				}
+	
+				$i = 0;
+				foreach ( $roles as $role ) {
+					$js = $role->to_json ();
+					if ($i !== 0)
+						$json .= "," . $js;
+					else
+						$json = $js;
+					$i ++;
+				}
+				header ( 'Content-Type: application/json; charset=UTF-8' );
+				$this->page->setOutput("[" . $json . "]");
+			}
+		}
+
 		public function beforeBy_id(\Library\HTTPRequest $request)
 		{
 			//Test if user can get, update or delete a user with token
