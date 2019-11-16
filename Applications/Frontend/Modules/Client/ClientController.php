@@ -66,16 +66,22 @@
 			$client = \Client::find_by_code_client(array( 'code_client' => $request->postData('code_client')));
 			if ($client) {
 				header('HTTP/1.1 403 Forbiden');
-				exit ('Email ' . $request->postData('code_client') . ' allready exists');
+				exit ('Code client ' . $request->postData('code_client') . ' allready exists');
 			}
 
 			$client = new \Client();
 
-			$client->set_attributes(array('entreprise_id' => $request->postData("entreprise_id"),
-								'nom' => $request->postData("username"),
+			$client->set_attributes(array(
+								'entreprise_id' => $request->postData('entreprise_id'),
+								'code_client' => $request->postData('code_client'),
+								'civilite' => $request->postData('civilite'),
+								'nom' => $request->postData('nom'),
+								'prenom' => $request->postData('prenom'),
+								'tel' => $request->postData('tel'),
+								'portable' => $request->postData('portable'),
 								'email' => $request->postData("email"),
-								'password' => $pwd,
-								'role' => $request->postData('role')));
+								'tva_intracom' => $request->postData('tva_intracom')
+			      ));
 
 			if ($client->save())
 			{
