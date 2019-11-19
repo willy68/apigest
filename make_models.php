@@ -1,6 +1,6 @@
 <?php
 
-include "connect_db.php";
+include "connect_bd.php";
 
 $query = "SHOW TABLES FROM {$db}";
 
@@ -19,12 +19,29 @@ function getMysqlConnexion($host, $dbname, $user, $password) {
             return $db;
 }
 
-$dao = getMysqlConnexion('localhost', $db, $user, $password);
+function getActiveRecordPHP($model_name) {
+	$model_table = ucfirst($model_name);
+  return "<?php \n
+	class {$model_table} extends ActiveRecord\Model { \n
+		static \$table_name = '{$model_name}'; \n
+	} \n
+	";
+}
+
+if ( isset( $argv ) ) {
+    parse_str(
+        join( "&", array_slice( $argv, 1 )
+    ), $_GET );
+}
+
+$dao = getMysqlConnexion($host, $db, $user, $password);
 
 $tables = $dao->query($query);
 
 while ($table = $tables->fetch()) {
-	print $table[0];
+	$model_name = $table[0];
+	$model = getActiveRecordPHP($model_name);
+	print($model);
 	print("\n");
 }
 
