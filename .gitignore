@@ -52,3 +52,6 @@ Crypto/*
 # appli
 Applications/Frontend/Config/plugins.ini
 
+# Other
+connect_bd.php
+

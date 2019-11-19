@@ -1,6 +1,6 @@
 <?php
 
-$db = 'paysagest';
+include "connect_db.php";
 
 $query = "SHOW TABLES FROM {$db}";
 
@@ -19,7 +19,7 @@ function getMysqlConnexion($host, $dbname, $user, $password) {
             return $db;
 }
 
-$dao = getMysqlConnexion('localhost', $db, 'user', 'password');
+$dao = getMysqlConnexion('localhost', $db, $user, $password);
 
 $tables = $dao->query($query);
 
