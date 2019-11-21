@@ -31,15 +31,15 @@ class {$model_class}Controller extends \Applications\{$Frontend}\BackController
 			$options = array();
 
 			if ($request->getExists('id')) {
-			  $options['entreprise_id'] = $request->getData('entreprise_id');
+			  $options\['entreprise_id'\] = $request->getData('entreprise_id');
 			}
 
 			if ($request->getExists('limit')) {
-				$options['limit'] = $request->getData('limit');
+				$options\['limit'\] = $request->getData('limit');
 			}
 			
 			if ($request->getExists('order')) {
-				$options['order'] = $request->getData('order');
+				$options\['order'\] = $request->getData('order');
 			}
 
 			${$model_name}s = \{$model_class}::all($options);
@@ -229,5 +229,4 @@ class {$model_class}Controller extends \Applications\{$Frontend}\BackController
 		}
 
 	}
-"
-
+";
