@@ -22,10 +22,10 @@ function getMysqlConnexion($host, $dbname, $user, $password) {
 }
 
 function getActiveRecordPHP($model_name) {
-	$model_table = ucfirst($model_name);
+	$model_class = ucfirst($model_name);
 	return "<?php
 
-class {$model_table} extends ActiveRecord\Model {
+class {$model_class} extends ActiveRecord\Model {
  static \$table_name = '{$model_name}';
 }
 \n";
