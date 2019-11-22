@@ -1,0 +1,147 @@
+<?php
+
+include "connect_bd.php";
+
+class Generate
+{
+
+  protected $db = null;
+
+  protected $query = "SHOW TABLES FROM ";
+
+  protected $options = array();
+
+  public function __construct()
+  {
+      $this->options['models_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_models';
+      $this->options['controllers_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_controllers';
+  }
+
+  public function setOptions($options = null)
+  {
+    if ($options && is_array($options)) {
+      $this->options = array_merge($this->options, $options);
+    } else {
+      $this->options = $options;
+    }
+  }
+
+  public function getMysqlConnexion($host, $dbname, $user, $password)
+  {
+    try {
+      $db = new \PDO('mysql:host='.$host.';dbname='.$dbname, $user, $password);
+      $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    } catch (\PDOException $e) { // On attrape les exceptions PDOException
+      echo 'La connexion a échoué.<br />';
+      echo 'Informations : [', $e->getCode(), '] ', $e->getMessage(); // On affiche le n° de l'erreur ainsi que le message
+    }
+    $db->exec("SET NAMES 'utf8'");
+            
+    return $db;
+  }
+
+  public function getTables($dao, $query)
+  {
+    $tables = $dao->query($query);
+    return $tables;
+  }
+  
+  public function getActiveRecordPHP($model_name)
+  {
+    $model_class = ucfirst($model_name);
+    return "<?php
+  
+class {$model_class} extends ActiveRecord\Model {
+static \$table_name = '{$model_name}';
+}
+\n";
+  }
+  
+  public function parseCommandLine($argv) {
+    if (isset($argv)) {
+      parse_str(
+      join(
+          "&",
+          array_slice($argv, 1)
+      ),
+      $_GET
+    );
+    }    
+    $options = &$this->options;
+
+    $callback = function($option, $get) use (&$options){
+      switch($get) {
+        case 'models':
+          $options['models'] = true;
+        break;
+        case 'controllers':
+          $options['controllers'] = true;
+        break;
+        case 'models_dir':
+          $options['models_dir'] = __DIR__.DIRECTORY_SEPARATOR.$option;
+        break;
+        case 'controllers_dir':
+          $options['controllers_dir'] = __DIR__.DIRECTORY_SEPARATOR.$option;
+        break;
+        case 'host':
+          $options['host'] = $option;
+        break;
+        case 'db':
+          $options['db'] = $option;
+        break;
+        case 'user':
+          $options['user'] = $option;
+        break;
+        case 'password':
+          $options['password'] = $option;
+      }
+    };
+
+    array_walk($_GET, $callback);
+
+  }
+
+  public function makeModels($dao)
+  {
+    $tables = $this->getTables($dao, $this->query.$this->options['db']);
+  
+    if (!is_dir($this->options['models_dir'])) {
+      mkdir($this->options['models_dir'], 0777);
+    }
+  
+    while ($table = $tables->fetch()) {
+      $model_name = $table[0];
+      $model = $this->getActiveRecordPHP($model_name);
+      if (($handle = fopen($this->options['models_dir'].
+          DIRECTORY_SEPARATOR.ucfirst($model_name).'.php', 'x'))) {
+        fwrite($handle, $model);
+        fclose($handle);
+      }
+      print($model);
+    }
+  }
+
+  public function makeControllers($dao)
+  {
+
+  }
+
+  public function run()
+  {
+    $dao = $this->getMysqlConnexion($this->options['host'], $this->options['db'], 
+    $this->options['user'], $this->options['password']);
+
+    if (isset($this->options['models']) && $this->options['models'] === true) {
+      $this->makeModels($dao);
+    }
+    if (isset($this->options['controllers']) && $this->options['controllers'] === true) {
+      $this->makeControllers($dao);
+    }
+  }  
+}
+
+$generate = new generate();
+$generate->setOptions(['host' => $host, 'db' => $db, 
+                        'user' => $user, 'password' => $password]);
+
+$generate->parseCommandLine($argv);
