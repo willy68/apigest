@@ -92,6 +92,25 @@ class {$model_class} extends ActiveRecord\Model {
 
   public function getControllerPHP($model_name)
   {
+    $model_class = ucfirst($model_name);
+    $app = 'Frontend';
+    if (isset($this->options['app'])) {
+      $app = ucfirst($this->options['app']);
+    } 
+
+    if (isset($this->options['model_controller']) && file_exists($this->options['model_controller'])) {
+      include $this->options['model_controller'];
+      return $controller;
+    } else {
+      return $controller = "<?php
+namespace Applications\\{$app}\Modules\\{$model_class};
+    
+  class {$model_class}Controller extends \Applications\\{$app}\BackController
+  {
+
+  }
+\n";
+    }
 
   }
   
@@ -169,8 +188,7 @@ class {$model_class} extends ActiveRecord\Model {
     while ($table = $tables->fetch()) {
       $model_name = $table[0];
       $model = $this->getActiveRecordPHP($model_name);
-      $file = $this->options['models_dir'].
-      DIRECTORY_SEPARATOR.ucfirst($model_name).'.php';
+      $file = $dir.DIRECTORY_SEPARATOR.ucfirst($model_name).'.php';
       if (!file_exists($file)) {
         if (($handle = fopen($file, 'x'))) {
             fwrite($handle, $model);
@@ -184,7 +202,32 @@ class {$model_class} extends ActiveRecord\Model {
 
   public function makeControllers($dao)
   {
-
+    $tables = $this->getTables($dao, $this->query.$this->options['db']);
+  
+    $dir = $this->options['controllers_dir'];
+    if (!is_dir($dir)) {
+      $oldumask = umask(0);
+      if (!mkdir($dir, 0777, true)) {
+        umask($oldumask);
+        exit('Impossible de créer le dossier '.$dir.$this->nl);
+      }
+      umask($oldumask);
+      echo "Creation du dossier ".$dir.$this->nl;
+    }
+  
+    while ($table = $tables->fetch()) {
+      $model_name = $table[0];
+      $model = $this->getControllerPHP($model_name);
+      $file = $dir.DIRECTORY_SEPARATOR.ucfirst($model_name).'Controller.php';
+      if (!file_exists($file)) {
+        if (($handle = fopen($file, 'x'))) {
+            fwrite($handle, $model);
+            fclose($handle);
+            chmod($file, 0666);
+            echo "Ecriture du fichier ".$file.$this->nl;
+        }
+      }
+    }
   }
 
   public function run()
