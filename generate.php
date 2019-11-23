@@ -15,6 +15,9 @@ class Generate
   public function __construct()
   {
     $this->options['host'] = 'localhost';
+    $this->options['db'] = 'paysagest';
+    $this->options['user'] = 'root';
+    $this->options['password'] = '';
     $this->options['models_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_models';
     $this->options['controllers_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_controllers';
 
@@ -43,8 +46,8 @@ class Generate
         }
       }
     }
-
   }
+
   public function setOptions($options = null)
   {
     if ($options && is_array($options)) {
@@ -61,7 +64,9 @@ class Generate
       $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     } catch (\PDOException $e) { // On attrape les exceptions PDOException
       echo 'La connexion a échoué.'.$this->nl;
-      echo 'Informations : [', $e->getCode(), '] ', $e->getMessage(); // On affiche le n° de l'erreur ainsi que le message
+      // On affiche le n° de l'erreur ainsi que le message
+      echo 'Informations : [,'. $e->getCode().', ] ,'. $e->getMessage().$this->nl;
+      exit("Fin du programme!");
     }
     $db->exec("SET NAMES 'utf8'");
             
