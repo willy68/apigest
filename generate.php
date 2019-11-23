@@ -1,8 +1,6 @@
 #!/usr/bin/php
 <?php
 
-include "connect_bd.php";
-
 class Generate
 {
 
@@ -19,8 +17,34 @@ class Generate
     $this->options['host'] = 'localhost';
     $this->options['models_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_models';
     $this->options['controllers_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_controllers';
+
+    $this->getInclude();
+
   }
 
+  public function getInclude($filename = "connect_bd.php")
+  {
+    if (is_file($filename)) {
+      include $filename;
+      if (isset($connect) && is_array($connect)) {
+        $this->setOptions($connect);
+      } else {
+        if (isset($host)) {
+          $this->options['host'] = $host;
+        }
+        if (isset($db)) {
+          $this->options['db'] = $db;
+        }
+        if (isset($user)) {
+          $this->options['user'] = $user;
+        }
+        if (isset($password)) {
+          $this->options['password'] = $password;
+        }
+      }
+    }
+
+  }
   public function setOptions($options = null)
   {
     if ($options && is_array($options)) {
@@ -160,6 +184,8 @@ class {$model_class} extends ActiveRecord\Model {
 
   public function run()
   {
+    $this->parseCommandLine();
+
     $dao = $this->getMysqlConnexion($this->options['host'], $this->options['db'], 
     $this->options['user'], $this->options['password']);
 
@@ -173,9 +199,5 @@ class {$model_class} extends ActiveRecord\Model {
 }
 
 $generate = new generate();
-$generate->setOptions(['host' => $host, 'db' => $db, 
-                        'user' => $user, 'password' => $password]);
-
-$generate->parseCommandLine();
 
 $generate->run();
