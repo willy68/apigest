@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 
 include "connect_bd.php";
@@ -11,10 +12,13 @@ class Generate
 
   protected $options = array();
 
+  protected $nl = "\n";
+
   public function __construct()
   {
-      $this->options['models_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_models';
-      $this->options['controllers_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_controllers';
+    $this->options['host'] = 'localhost';
+    $this->options['models_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_models';
+    $this->options['controllers_dir'] = __DIR__.DIRECTORY_SEPARATOR.'generated_controllers';
   }
 
   public function setOptions($options = null)
@@ -32,7 +36,7 @@ class Generate
       $db = new \PDO('mysql:host='.$host.';dbname='.$dbname, $user, $password);
       $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     } catch (\PDOException $e) { // On attrape les exceptions PDOException
-      echo 'La connexion a échoué.<br />';
+      echo 'La connexion a échoué.'.$this->nl;
       echo 'Informations : [', $e->getCode(), '] ', $e->getMessage(); // On affiche le n° de l'erreur ainsi que le message
     }
     $db->exec("SET NAMES 'utf8'");
@@ -52,12 +56,18 @@ class Generate
     return "<?php
   
 class {$model_class} extends ActiveRecord\Model {
-static \$table_name = '{$model_name}';
+  static \$table_name = '{$model_name}';
 }
 \n";
   }
+
+  public function getControllerPHP($model_name)
+  {
+
+  }
   
-  public function parseCommandLine($argv) {
+  public function parseCommandLine() {
+    global $argv;
     if (isset($argv)) {
       parse_str(
       join(
@@ -66,6 +76,8 @@ static \$table_name = '{$model_name}';
       ),
       $_GET
     );
+    } else {
+      $this->nl = '<br />';
     }    
     $options = &$this->options;
 
@@ -78,10 +90,16 @@ static \$table_name = '{$model_name}';
           $options['controllers'] = true;
         break;
         case 'models_dir':
-          $options['models_dir'] = __DIR__.DIRECTORY_SEPARATOR.$option;
+          $options['models_dir'] = $option;
         break;
         case 'controllers_dir':
-          $options['controllers_dir'] = __DIR__.DIRECTORY_SEPARATOR.$option;
+          $options['controllers_dir'] = $option;
+        break;
+        case 'model_controller':
+          $options['model_controller'] = $option;
+        break;
+        case 'app':
+          $options['app'] = $option;
         break;
         case 'host':
           $options['host'] = $option;
@@ -94,6 +112,9 @@ static \$table_name = '{$model_name}';
         break;
         case 'password':
           $options['password'] = $option;
+        break;
+        default:
+        exit('Commande introuvable: '.$get."\n");
       }
     };
 
@@ -105,19 +126,30 @@ static \$table_name = '{$model_name}';
   {
     $tables = $this->getTables($dao, $this->query.$this->options['db']);
   
-    if (!is_dir($this->options['models_dir'])) {
-      mkdir($this->options['models_dir'], 0777);
+    $dir = $this->options['models_dir'];
+    if (!is_dir($dir)) {
+      $oldumask = umask(0);
+      if (!mkdir($dir, 0777, true)) {
+        umask($oldumask);
+        exit('Impossible de créer le dossier '.$dir.$this->nl);
+      }
+      umask($oldumask);
+      echo "Creation du dossier ".$dir.$this->nl;
     }
   
     while ($table = $tables->fetch()) {
       $model_name = $table[0];
       $model = $this->getActiveRecordPHP($model_name);
-      if (($handle = fopen($this->options['models_dir'].
-          DIRECTORY_SEPARATOR.ucfirst($model_name).'.php', 'x'))) {
-        fwrite($handle, $model);
-        fclose($handle);
+      $file = $this->options['models_dir'].
+      DIRECTORY_SEPARATOR.ucfirst($model_name).'.php';
+      if (!file_exists($file)) {
+        if (($handle = fopen($file, 'x'))) {
+            fwrite($handle, $model);
+            fclose($handle);
+            chmod($file, 0666);
+            echo "Ecriture du fichier ".$file.$this->nl;
+        }
       }
-      print($model);
     }
   }
 
@@ -144,4 +176,6 @@ $generate = new generate();
 $generate->setOptions(['host' => $host, 'db' => $db, 
                         'user' => $user, 'password' => $password]);
 
-$generate->parseCommandLine($argv);
+$generate->parseCommandLine();
+
+$generate->run();

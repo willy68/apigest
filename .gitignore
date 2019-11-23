@@ -55,3 +55,5 @@ Applications/Frontend/Config/plugins.ini
 # Other
 connect_bd.php
 /generated_models
+/generated_controllers
+

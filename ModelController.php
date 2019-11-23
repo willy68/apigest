@@ -1,8 +1,8 @@
 <?php
 $controller = "<?php
-	namespace Applications\{$Frontend}\Modules\{$Entreprise};
+	namespace Applications\{$app}\Modules\{$model_class};
 
-class {$model_class}Controller extends \Applications\{$Frontend}\BackController
+class {$model_class}Controller extends \Applications\{$app}\BackController
 	{
 
 	/*	public function beforeList(\Library\HTTPRequest $request)
