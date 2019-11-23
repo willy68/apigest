@@ -170,11 +170,8 @@ namespace Applications\\{$app}\Modules\\{$model_class};
 
   }
 
-  public function makeModels($dao)
+  public function createDir($dir)
   {
-    $tables = $this->getTables($dao, $this->query.$this->options['db']);
-  
-    $dir = $this->options['models_dir'];
     if (!is_dir($dir)) {
       $oldumask = umask(0);
       if (!mkdir($dir, 0777, true)) {
@@ -183,19 +180,45 @@ namespace Applications\\{$app}\Modules\\{$model_class};
       }
       umask($oldumask);
       echo "Creation du dossier ".$dir.$this->nl;
+    }   
+  }
+
+  public function saveModel($model_name, $filename)
+  {
+    $model = $this->getActiveRecordPHP($model_name);
+    if (!file_exists($filename)) {
+      if (($handle = fopen($filename, 'x'))) {
+          fwrite($handle, $model);
+          fclose($handle);
+          chmod($filename, 0666);
+          echo "Ecriture du fichier ".$filename.$this->nl;
+      }
     }
+  }
+
+  public function makeModels($dao)
+  {
+    $tables = $this->getTables($dao, $this->query.$this->options['db']);
   
+    $dir = $this->options['models_dir'];
+    $this->createDir($dir);  
+    
     while ($table = $tables->fetch()) {
       $model_name = $table[0];
-      $model = $this->getActiveRecordPHP($model_name);
       $file = $dir.DIRECTORY_SEPARATOR.ucfirst($model_name).'.php';
-      if (!file_exists($file)) {
-        if (($handle = fopen($file, 'x'))) {
-            fwrite($handle, $model);
-            fclose($handle);
-            chmod($file, 0666);
-            echo "Ecriture du fichier ".$file.$this->nl;
-        }
+      $this->saveModel($model_name, $file);
+    }
+  }
+
+  public function saveController($model_name, $filename)
+  {
+    $model = $this->getControllerPHP($model_name);
+    if (!file_exists($filename)) {
+      if (($handle = fopen($filename, 'x'))) {
+          fwrite($handle, $model);
+          fclose($handle);
+          chmod($filename, 0666);
+          echo "Ecriture du fichier ".$filename.$this->nl;
       }
     }
   }
@@ -205,28 +228,12 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     $tables = $this->getTables($dao, $this->query.$this->options['db']);
   
     $dir = $this->options['controllers_dir'];
-    if (!is_dir($dir)) {
-      $oldumask = umask(0);
-      if (!mkdir($dir, 0777, true)) {
-        umask($oldumask);
-        exit('Impossible de créer le dossier '.$dir.$this->nl);
-      }
-      umask($oldumask);
-      echo "Creation du dossier ".$dir.$this->nl;
-    }
-  
+    $this->createDir($dir);
+
     while ($table = $tables->fetch()) {
       $model_name = $table[0];
-      $model = $this->getControllerPHP($model_name);
       $file = $dir.DIRECTORY_SEPARATOR.ucfirst($model_name).'Controller.php';
-      if (!file_exists($file)) {
-        if (($handle = fopen($file, 'x'))) {
-            fwrite($handle, $model);
-            fclose($handle);
-            chmod($file, 0666);
-            echo "Ecriture du fichier ".$file.$this->nl;
-        }
-      }
+      $this->saveController($model_name, $file);
     }
   }
 
