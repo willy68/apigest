@@ -111,7 +111,14 @@ namespace Applications\\{$app}\Modules\\{$model_class};
   }
 \n";
     }
+  }
 
+  public function getRouteXML($model_name)
+  {
+    return 
+    "    <route url=\"/{$model_name}(\\?.+=.+)*\" module=\"{$model_name}\" action=\"list\" vars=\"params\"/>
+    <route url=\"/{$model_name}/([0-9+])(\\?.+=.+)*\" module=\"{$model_name}\" action=\"by_id\" vars=\"id,params\"/>
+    ";
   }
   
   public function parseCommandLine() {
@@ -186,12 +193,14 @@ namespace Applications\\{$app}\Modules\\{$model_class};
   public function saveModel($model_name, $filename)
   {
     $model = $this->getActiveRecordPHP($model_name);
+    $route = $this->getRouteXML($model_name);
     if (!file_exists($filename)) {
       if (($handle = fopen($filename, 'x'))) {
           fwrite($handle, $model);
           fclose($handle);
           chmod($filename, 0666);
           echo "Ecriture du fichier ".$filename.$this->nl;
+          echo $route.$this->nl;
       }
     }
   }
@@ -235,6 +244,11 @@ namespace Applications\\{$app}\Modules\\{$model_class};
       $file = $dir.DIRECTORY_SEPARATOR.ucfirst($model_name).'Controller.php';
       $this->saveController($model_name, $file);
     }
+  }
+
+  public function saveRoute($model_name, $filename)
+  {
+
   }
 
   public function run()
