@@ -56,4 +56,5 @@ Applications/Frontend/Config/plugins.ini
 connect_bd.php
 /generated_models
 /generated_controllers
+/generated_routes
 

@@ -1,6 +1,6 @@
 <?php
 $controller = '<?php
-	namespace Applications\\'.$app.'\Modules\\'.$model_class.';
+namespace Applications\\'.$app.'\Modules\\'.$model_class.';
 
 class '.$model_class.'Controller extends \Applications\\'.$app.'\BackController
 	{
