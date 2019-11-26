@@ -62,23 +62,4 @@
         }
     }
 
-    public function beforeBy_username(\Library\HTTPRequest $request)
-    {
-        //Test if user can get, update or delete a record with token
-        $this->authenticated(true);
-    }
-
-    public function executeBy_username(\Library\HTTPRequest $request)
-    {
-        if ($this->method === 'GET') {
-            $this->getBy_username($request);
-        }
-        /*			else if ($this->method === 'PUT') {
-                        $this->updatesUser($request);
-                    }
-                    else if ($this->method === 'DELETE') {
-                        $this->deleteUser($request);
-                    }*/
-    }
-
   }
