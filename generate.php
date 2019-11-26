@@ -100,7 +100,7 @@ class {$model_class} extends ActiveRecord\Model {
     } 
 
     if (isset($this->template['controller']) && file_exists($this->template['controller'])) {
-      include $this->template['controller'];
+      $controller = include $this->template['controller'];
       return $controller;
     } else {
       return "<?php
@@ -117,7 +117,7 @@ namespace Applications\\{$app}\Modules\\{$model_class};
   public function getRouteXML($model_name)
   {
     if (isset($this->template['route']) && file_exists($this->template['route'])) {
-      include $this->template['route'];
+      $route = include $this->template['route'];
       return $route;
     } else {
       return
