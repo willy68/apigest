@@ -214,6 +214,10 @@ namespace Applications\\{$app}\Modules\\{$model_class};
         case 'password':
           $options['password'] = $option;
         break;
+        case 't':
+        case 'table':
+          $options['table'] = $option;
+        break;
         default:
         exit('Commande introuvable: '.$get."\n");
       }
@@ -270,6 +274,21 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     }
   }
 
+  public function makeModel($dao)
+  {
+    if (isset($this->options['table'])) {
+      $table = $this->options['table'];
+      $dir = $this->options['models_dir'];
+      $this->createDir($dir);
+
+      $file = $dir.DIRECTORY_SEPARATOR.ucfirst($table).'.php';
+      $this->saveModel($table, $file);
+    } else {
+      exit("Option <table> ou <t> manquante ex:
+      ./generate model t=user");
+    }
+}
+
   public function saveController($model_name, $filename)
   {
     $model = $this->getControllerPHP($model_name);
@@ -287,6 +306,21 @@ namespace Applications\\{$app}\Modules\\{$model_class};
       $model_name = $table[0];
       $file = $dir.DIRECTORY_SEPARATOR.ucfirst($model_name).'Controller.php';
       $this->saveController($model_name, $file);
+    }
+  }
+
+  public function makeController($dao)
+  {
+    if (isset($this->options['table'])) {
+      $table = $this->options['table'];
+      $dir = $this->options['controllers_dir'];
+      $this->createDir($dir);
+
+      $file = $dir.DIRECTORY_SEPARATOR.ucfirst($table).'.php';
+      $this->saveController($table, $file);
+    } else {
+      exit("Option <table> ou <t> manquante ex:
+      ./generate controller t=user");
     }
   }
 
@@ -314,6 +348,25 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     $this->saveFile($model."</routes>", $filename);
   }
 
+  public function makeRoute($dao)
+  {
+    if (isset($this->options['table'])) {
+      $table = $this->options['table'];
+      $dir = $this->options['routes_dir'];
+      $this->createDir($dir);
+      
+      $model = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>
+<routes>
+";
+      $filename = $dir.DIRECTORY_SEPARATOR.'route.xml';
+      $model .= $this->getRouteXML($table);
+      $this->saveFile($model."</routes>", $filename);
+    } else {
+      exit("Option <table> ou <t> manquante ex:
+      ./generate route t=user");
+    }
+  }
+
   public function run()
   {
     $this->parseCommandLine();
@@ -329,6 +382,16 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     }
     if (isset($this->options['routes']) && $this->options['routes'] === true) {
       $this->makeRoutes($dao);
+    }
+
+    if (isset($this->options['model']) && $this->options['model'] === true) {
+      $this->makeModel($dao);
+    }
+    if (isset($this->options['controller']) && $this->options['controller'] === true) {
+      $this->makeController($dao);
+    }
+    if (isset($this->options['route']) && $this->options['route'] === true) {
+      $this->makeRoute($dao);
     }
   }  
 }
