@@ -128,9 +128,10 @@ namespace Applications\\{$app}\Modules\\{$model_class};
   }
   
   public function parseCommandLine() {
+    // $opts = getopt('m::d::t::' ,['make::', 'dir::', 'template::']);
     global $argv;
 
-    if (isset($argv)) {
+    if ('cli' === PHP_SAPI) {
       parse_str(join("&", array_slice($argv, 1)), $_GET);
     } else {
       $this->nl = '<br />';
@@ -284,7 +285,7 @@ namespace Applications\\{$app}\Modules\\{$model_class};
       $file = $dir.DIRECTORY_SEPARATOR.ucfirst($table).'.php';
       $this->saveModel($table, $file);
     } else {
-      exit("Option <table> ou <t> manquante ex:
+      exit("Option [table] ou [t] manquante ex:".$this->nl."
       ./generate model t=user");
     }
 }
