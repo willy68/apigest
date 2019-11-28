@@ -6,6 +6,10 @@ class Generate
 
   protected $query = "SHOW TABLES FROM ";
 
+  protected $columns = "SHOW COLUMNS FROM ";
+
+  protected $dao = null;
+
   protected $options = array();
 
   protected $template = array();
@@ -70,6 +74,8 @@ class Generate
       exit("Fin du programme!");
     }
     $db->exec("SET NAMES 'utf8'");
+
+    $this->dao = $db;
             
     return $db;
   }
@@ -79,52 +85,11 @@ class Generate
     $tables = $dao->query($query);
     return $tables;
   }
-  
-  public function getActiveRecordPHP($model_name)
-  {
-    $model_class = ucfirst($model_name);
-    return "<?php
-  
-class {$model_class} extends ActiveRecord\Model {
-  static \$table_name = '{$model_name}';
-}
-\n";
-  }
 
-  public function getControllerPHP($model_name)
+  public function getColumns($dao, $query)
   {
-    $model_class = ucfirst($model_name);
-    $app = 'Frontend';
-    if (isset($this->options['app'])) {
-      $app = ucfirst($this->options['app']);
-    } 
-
-    if (isset($this->template['controller']) && file_exists($this->template['controller'])) {
-      $controller = include $this->template['controller'];
-      return $controller;
-    } else {
-      return "<?php
-namespace Applications\\{$app}\Modules\\{$model_class};
-    
-  class {$model_class}Controller extends \Applications\\{$app}\BackController
-  {
-
-  }
-\n";
-    }
-  }
-
-  public function getRouteXML($model_name)
-  {
-    if (isset($this->template['route']) && file_exists($this->template['route'])) {
-      $route = include $this->template['route'];
-      return $route;
-    } else {
-      return
-    "    <route url=\"/{$model_name}(\\?.+=.+)*\" module=\"{$model_name}\" action=\"list\" vars=\"params\"/>
-    <route url=\"/{$model_name}/([0-9+])(\\?.+=.+)*\" module=\"{$model_name}\" action=\"by_id\" vars=\"id,params\"/>
-";
-    }
+    $columns = $dao->query($query);
+    return $columns;
   }
   
   public function parseCommandLine() {
@@ -138,66 +103,32 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     }
 
     $options = &$this->options;
-    $template = &$this->template;
+    // $template = $this->template;
 
-    $callback = function($option, $get) use (&$options,&$template){
+    foreach($_GET as $get => $option) {
       switch($get) {
-        case 'ms':
-        case 'models':
-          $options['models'] = true;
-          if (!empty($option)) {
-            $template['model'] = $option;
-          }
-        break;
         case 'm':
-        case 'model':
-          $options['model'] = true;
+        case 'make':
           if (!empty($option)) {
-            $template['model'] = $option;
+            $options[$option] = true;
+          } else {
+            exit('Aucune action demandée, fin du programme!'.$this->nl);
           }
         break;
-        case 'cs':
-        case 'controllers':
-          $options['controllers'] = true;
+        case 'd':
+        case 'dir':
           if (!empty($option)) {
-            $template['controller'] = $option;
+            $options['dir'] = $option;
           }
         break;
-        case 'c':
-        case 'controller':
-          $options['controller'] = true;
+        case 'tpl':
+        case 'template':
           if (!empty($option)) {
-            $template['controller'] = $option;
+            $options['template'] = $option;
           }
-        break;
-        case 'rs':
-        case 'routes':
-          $options['routes'] = true;
-          if (!empty($option)) {
-            $template['route'] = $option;
-          }
-        break;
-        case 'r':
-        case 'route':
-          $options['route'] = true;
-          if (!empty($option)) {
-            $template['route'] = $option;
-          }
-        break;
-        case 'md':
-        case 'models_dir':
-          $options['models_dir'] = $option;
-        break;
-        case 'cd':
-        case 'controllers_dir':
-          $options['controllers_dir'] = $option;
-        break;
-        case 'rd':
-        case 'routes_dir':
-          $options['routes_dir'] = $option;
         break;
         case 'a':
-        case 'app':
+        case 'application':
           $options['app'] = $option;
         break;
         case 'h':
@@ -222,10 +153,7 @@ namespace Applications\\{$app}\Modules\\{$model_class};
         default:
         exit('Commande introuvable: '.$get."\n");
       }
-    };
-
-    array_walk($_GET, $callback);
-
+    }
   }
 
   public function createDir($dir)
@@ -255,15 +183,26 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     }
   }
 
+  public function getActiveRecordPHP($model_name)
+  {
+    $model_class = ucfirst($model_name);
+    return "<?php
+  
+class {$model_class} extends ActiveRecord\Model {
+  static \$table_name = '{$model_name}';
+}
+\n";
+  }
+
   public function saveModel($model_name, $filename)
   {
     $model = $this->getActiveRecordPHP($model_name);
     $this->saveFile($model, $filename);
   }
 
-  public function makeModels($dao)
+  public function makeModels()
   {
-    $tables = $this->getTables($dao, $this->query.$this->options['db']);
+    $tables = $this->getTables($this->dao, $this->query.$this->options['db']);
   
     $dir = $this->options['models_dir'];
     $this->createDir($dir);  
@@ -275,7 +214,7 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     }
   }
 
-  public function makeModel($dao)
+  public function makeModel()
   {
     if (isset($this->options['table'])) {
       $table = $this->options['table'];
@@ -286,19 +225,52 @@ namespace Applications\\{$app}\Modules\\{$model_class};
       $this->saveModel($table, $file);
     } else {
       exit("Option [table] ou [t] manquante ex:".$this->nl."
-      ./generate model t=user");
+      ./generate m=model t=user");
     }
 }
 
-  public function saveController($model_name, $filename)
+public function getControllerPHP($model_name)
+{
+  $model_class = ucfirst($model_name);
+  $app = 'Frontend';
+  if (isset($this->options['app'])) {
+    $app = ucfirst($this->options['app']);
+  } 
+
+  if (isset($this->options['template']) && file_exists($this->options['template'])) {
+    $sql = "SELECT COLUMN_NAME
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = '{$this->options['db']}' AND TABLE_NAME = '{$model_name}'
+    AND COLUMN_NAME != 'id'";
+    
+    $columns = $this->getColumns($this->dao, $sql);
+    $cols = array();
+    while ($column = $columns->fetch(PDO::FETCH_ASSOC)) {
+      $cols[] = $column['COLUMN_NAME'];
+    }
+    $controller = include $this->options['template'];
+    return $controller;
+  } else {
+    return "<?php
+namespace Applications\\{$app}\Modules\\{$model_class};
+  
+class {$model_class}Controller extends \Applications\\{$app}\BackController
+{
+
+}
+\n";
+  }
+}
+
+public function saveController($model_name, $filename)
   {
     $model = $this->getControllerPHP($model_name);
     $this->saveFile($model, $filename);
   }
 
-  public function makeControllers($dao)
+  public function makeControllers()
   {
-    $tables = $this->getTables($dao, $this->query.$this->options['db']);
+    $tables = $this->getTables($this->dao, $this->query.$this->options['db']);
   
     $dir = $this->options['controllers_dir'];
     $this->createDir($dir);
@@ -310,30 +282,43 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     }
   }
 
-  public function makeController($dao)
+  public function makeController()
   {
     if (isset($this->options['table'])) {
       $table = $this->options['table'];
       $dir = $this->options['controllers_dir'];
       $this->createDir($dir);
 
-      $file = $dir.DIRECTORY_SEPARATOR.ucfirst($table).'.php';
+      $file = $dir.DIRECTORY_SEPARATOR.ucfirst($table).'Controller.php';
       $this->saveController($table, $file);
     } else {
       exit("Option <table> ou <t> manquante ex:
-      ./generate controller t=user");
+      ./generate m=controller t=user");
     }
   }
 
+  public function getRouteXML($model_name)
+  {
+    if (isset($this->options['template']) && file_exists($this->options['template'])) {
+      $route = include $this->options['template'];
+      return $route;
+    } else {
+      return
+    "    <route url=\"/{$model_name}(\\?.+=.+)*\" module=\"{$model_name}\" action=\"list\" vars=\"params\"/>
+    <route url=\"/{$model_name}/([0-9+])(\\?.+=.+)*\" module=\"{$model_name}\" action=\"by_id\" vars=\"id,params\"/>
+";
+    }
+  }
+  
   public function saveRoute($model_name, $filename)
   {
     $model = $this->getRouteXML($model_name);
     $this->saveFile($model, $filename);
   }
 
-  public function makeRoutes($dao)
+  public function makeRoutes()
   {
-    $tables = $this->getTables($dao, $this->query.$this->options['db']);
+    $tables = $this->getTables($this->dao, $this->query.$this->options['db']);
   
     $dir = $this->options['routes_dir'];
     $this->createDir($dir);
@@ -349,7 +334,7 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     $this->saveFile($model."</routes>", $filename);
   }
 
-  public function makeRoute($dao)
+  public function makeRoute()
   {
     if (isset($this->options['table'])) {
       $table = $this->options['table'];
@@ -364,7 +349,7 @@ namespace Applications\\{$app}\Modules\\{$model_class};
       $this->saveFile($model."</routes>", $filename);
     } else {
       exit("Option <table> ou <t> manquante ex:
-      ./generate route t=user");
+      ./generate m=route t=user");
     }
   }
 
@@ -376,23 +361,23 @@ namespace Applications\\{$app}\Modules\\{$model_class};
     $this->options['user'], $this->options['password']);
 
     if (isset($this->options['models']) && $this->options['models'] === true) {
-      $this->makeModels($dao);
+      $this->makeModels();
     }
     if (isset($this->options['controllers']) && $this->options['controllers'] === true) {
-      $this->makeControllers($dao);
+      $this->makeControllers();
     }
     if (isset($this->options['routes']) && $this->options['routes'] === true) {
-      $this->makeRoutes($dao);
+      $this->makeRoutes();
     }
 
     if (isset($this->options['model']) && $this->options['model'] === true) {
-      $this->makeModel($dao);
+      $this->makeModel();
     }
     if (isset($this->options['controller']) && $this->options['controller'] === true) {
-      $this->makeController($dao);
+      $this->makeController();
     }
     if (isset($this->options['route']) && $this->options['route'] === true) {
-      $this->makeRoute($dao);
+      $this->makeRoute();
     }
   }  
 }
