@@ -6,8 +6,6 @@ class Generate
 
   protected $query = "SHOW TABLES FROM ";
 
-  protected $columns = "SHOW COLUMNS FROM ";
-
   protected $dao = null;
 
   protected $options = array();
@@ -92,6 +90,24 @@ class Generate
     return $columns;
   }
   
+  public function getColumnsQuery($db, $table)
+  {
+    return "SELECT COLUMN_NAME
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = '{$db}' AND TABLE_NAME = '{$table}'
+    AND COLUMN_NAME NOT IN ('id','created_at','updated_at','password')";
+  }
+
+  public function getColumnsArray($sql)
+  {
+    $columns = $this->getColumns($this->dao, $sql);
+    $cols = array();
+    while ($column = $columns->fetch(PDO::FETCH_ASSOC)) {
+      $cols[] = $column['COLUMN_NAME'];
+    }
+    return $cols;
+  }
+
   public function parseCommandLine() {
     // $opts = getopt('m::d::t::' ,['make::', 'dir::', 'template::']);
     global $argv;
@@ -238,15 +254,17 @@ public function getControllerPHP($model_name)
   } 
 
   if (isset($this->options['template']) && file_exists($this->options['template'])) {
-    $sql = "SELECT COLUMN_NAME
-    FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = '{$this->options['db']}' AND TABLE_NAME = '{$model_name}'
-    AND COLUMN_NAME != 'id'";
+
+    $sql = $this->getColumnsQuery($this->options['db'], $model_name);
     
-    $columns = $this->getColumns($this->dao, $sql);
-    $cols = array();
-    while ($column = $columns->fetch(PDO::FETCH_ASSOC)) {
-      $cols[] = $column['COLUMN_NAME'];
+    $columns = $this->getColumnsArray($sql);
+    $attributes = '';
+    $i = 0;
+    foreach ($columns as $column) {
+      $attributes .= "'{$column}' => \$request->postData('{$column}')";
+      $i++;
+      if ($i < count($columns)) $attributes .= ',';
+      $attributes .= "\n";
     }
     $controller = include $this->options['template'];
     return $controller;
