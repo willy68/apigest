@@ -261,7 +261,7 @@ public function getControllerPHP($model_name)
     $attributes = '';
     $i = 0;
     foreach ($columns as $column) {
-      $attributes .= "'{$column}' => \$request->postData('{$column}')";
+      $attributes .= "    '{$column}' => \$request->postData('{$column}')";
       $i++;
       if ($i < count($columns)) $attributes .= ',';
       $attributes .= "\n";

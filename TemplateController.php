@@ -45,18 +45,8 @@ class '.$model_class.'Controller extends \Applications\\'.$app.'\Modules\ApiCont
 
       $'.$model_name.' = new \\'.$model_class.'();
 
-			$'.$model_name.'->set_attributes(array(\'siret\' => $request->postData(\'siret\'),
-								\'nom\' => $request->postData(\'nom\'),
-								\'ape\' => $request->postData(\'ape\'),
-								\'tva_intracom\' => $request->postData(\'tva_intracom\'),
-								\'adresse\' => $request->postData(\'role\'),
-								\'suite_adresse\' => $request->postData(\'suite_adresse\'),
-								\'cp\' => $request->postData(\'cp\'),
-								\'ville\' => $request->postData(\'ville\'),
-								\'tel\' => $request->postData(\'tel\'),
-								\'portable\' => $request->postData(\'portable\'),
-								\'email\' => $request->postData(\'email\'),
-								\'regime_commercial\' => $request->postData(\'regime_commercial\')
+			$'.$model_name.'->set_attributes(array(/*'."\n"
+				.$attributes.'*/
 							));
 
 			if ($'.$model_name.'->save())

@@ -3,9 +3,16 @@
 
   class ApiController extends \Applications\Frontend\BackController
   {
-    public function authenticated($check)
+    protected $checkAuth = false;
+
+    public function setCheckAuth($check)
     {
-      if (!$check) return;
+      $this->checkAuth = $check;
+    }
+
+    public function authenticated()
+    {
+      if (!$this->checkAuth) return;
       if (!$this->isAuthorized()) {
         header('HTTP/1.1 401 Unauthorized');
         exit('Utilisateur non authentifié');
@@ -32,7 +39,7 @@
     {
         //Test if user can list users with token
         if ($this->method === 'GET') {
-          $this->authenticated(true);
+          $this->authenticated();
         }
     }
 
@@ -45,10 +52,20 @@
         }
     }
 
+    public function getList(\Library\HTTPRequest $request)
+    {
+
+    }
+
+    public function create(\Library\HTTPRequest $request)
+    {
+
+    }
+
     public function beforeBy_id(\Library\HTTPRequest $request)
     {
         //Test if user can get, update or delete a record with token
-        $this->authenticated(true);
+        $this->authenticated();
     }
 
     public function executeBy_id(\Library\HTTPRequest $request)
@@ -60,6 +77,21 @@
         } elseif ($this->method === 'DELETE') {
             $this->delete($request);
         }
+    }
+
+    public function get(\Library\HTTPRequest $request)
+    {
+
+    }
+
+    public function update(\Library\HTTPRequest $request)
+    {
+
+    }
+
+    public function delete(\Library\HTTPRequest $request)
+    {
+      
     }
 
   }
