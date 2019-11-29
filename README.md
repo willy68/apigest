@@ -1,4 +1,4 @@
-# mvcar
-Un petit mvc perso en php
+# APIGEST
+API REST pour l'application web angular Paysagest
 
-Installation: composer create-project willy68/mvcar
+Installation: composer create-project willy68/apigest
