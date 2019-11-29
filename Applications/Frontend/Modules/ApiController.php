@@ -1,15 +1,34 @@
 <?php
   namespace Applications\Frontend\Modules;
 
+  /**
+   * ApiController class
+   */
   class ApiController extends \Applications\Frontend\BackController
   {
+    /**
+     * Undocumented variable
+     *
+     * @var boolean
+     */
     protected $checkAuth = false;
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $check
+     * @return void
+     */
     public function setCheckAuth($check)
     {
       $this->checkAuth = $check;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function authenticated()
     {
       if (!$this->checkAuth) return;
@@ -19,6 +38,12 @@
       }
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $records
+     * @return void
+     */
     public function jsonArray($records)
     {
       $i = 0;
@@ -35,6 +60,12 @@
       return $json;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function beforeList(\Library\HTTPRequest $request)
     {
         //Test if user can list users with token
@@ -43,6 +74,12 @@
         }
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function executeList(\Library\HTTPRequest $request)
     {
         if ($this->method === 'GET') {
@@ -52,22 +89,46 @@
         }
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function getList(\Library\HTTPRequest $request)
     {
 
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function create(\Library\HTTPRequest $request)
     {
 
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function beforeBy_id(\Library\HTTPRequest $request)
     {
         //Test if user can get, update or delete a record with token
         $this->authenticated();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function executeBy_id(\Library\HTTPRequest $request)
     {
         if ($this->method === 'GET') {
@@ -79,19 +140,37 @@
         }
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function get(\Library\HTTPRequest $request)
     {
 
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function update(\Library\HTTPRequest $request)
     {
 
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param \Library\HTTPRequest $request
+     * @return void
+     */
     public function delete(\Library\HTTPRequest $request)
     {
-      
+
     }
 
   }
