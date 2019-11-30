@@ -85,7 +85,6 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 
 			header ( \'Content-Type: application/json; charset=UTF-8\' );
 			$this->page->setOutput($json);
-
 		}
 
 		protected function update(\Library\HTTPRequest $request)
@@ -109,7 +108,6 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				header(\'HTTP/1.1 400 Bad request\');
 				$this->page->setOutput(\'400 Bad request\');
 			}
-			
 		}
 		
 		protected function delete(\Library\HTTPRequest $request)

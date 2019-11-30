@@ -54,9 +54,7 @@ class RoleController extends \Applications\Frontend\Modules\ApiController
 
       $role = new \Role();
 
-			$role->set_attributes(array('role' => $request->postData('role')
-
-							));
+			$role->set_attributes(array('role' => $request->postData('role')));
 
 			if ($role->save())
 			{
@@ -84,7 +82,6 @@ class RoleController extends \Applications\Frontend\Modules\ApiController
 
 			header ( 'Content-Type: application/json; charset=UTF-8' );
 			$this->page->setOutput($json);
-
 		}
 
 		protected function update(\Library\HTTPRequest $request)
@@ -107,8 +104,7 @@ class RoleController extends \Applications\Frontend\Modules\ApiController
 			} else {
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
-			}
-			
+			}			
 		}
 		
 		protected function delete(\Library\HTTPRequest $request)

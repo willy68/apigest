@@ -84,13 +84,11 @@
   <route url="/dernier_code/create(\?.+=.+)*" module="dernier_code" action="create" vars="params"/>
   <route url="/dernier_code/([0-9+])(\?.+=.+)*" module="dernier_code" action="by_id" vars="id,params"/>
 
-  <route url="/entreprise/([0-9]+)/deviss(\?.+=.+)*" module="devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/devis/list(\?.+=.+)*" module="devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/devis(\?.+=.+)*" module="devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/devis/create(\?.+=.+)*" module="devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/devis/([0-9]+)" module="devis" action="by_id" vars="entreprise_id,id"/>
 
-  <route url="/deviss(\?.+=.+)*" module="devis" action="list" vars="params"/>
   <route url="/devis/list(\?.+=.+)*" module="devis" action="list" vars="params"/>
   <route url="/devis(\?.+=.+)*" module="devis" action="create" vars="params"/>
   <route url="/devis/create(\?.+=.+)*" module="devis" action="create" vars="params"/>
@@ -107,12 +105,6 @@
   <route url="/echeance(\?.+=.+)*" module="echeance" action="create" vars="params"/>
   <route url="/echeance/create(\?.+=.+)*" module="echeance" action="create" vars="params"/>
   <route url="/echeance/([0-9+])(\?.+=.+)*" module="echeance" action="by_id" vars="id,params"/>
-
-  <route url="/entreprise/([0-9]+)/entreprises(\?.+=.+)*" module="entreprise" action="list" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/entreprise/list(\?.+=.+)*" module="entreprise" action="list" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/entreprise(\?.+=.+)*" module="entreprise" action="create" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/entreprise/create(\?.+=.+)*" module="entreprise" action="create" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/entreprise/([0-9]+)" module="entreprise" action="by_id" vars="entreprise_id,id"/>
 
   <route url="/entreprises(\?.+=.+)*" module="entreprise" action="list" vars="params"/>
   <route url="/entreprise/list(\?.+=.+)*" module="entreprise" action="list" vars="params"/>
@@ -156,13 +148,11 @@
   <route url="/famille_article/create(\?.+=.+)*" module="famille_article" action="create" vars="params"/>
   <route url="/famille_article/([0-9+])(\?.+=.+)*" module="famille_article" action="by_id" vars="id,params"/>
 
-  <route url="/entreprise/([0-9]+)/ligne_deviss(\?.+=.+)*" module="ligne_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/ligne_devis/list(\?.+=.+)*" module="ligne_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/ligne_devis(\?.+=.+)*" module="ligne_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/ligne_devis/create(\?.+=.+)*" module="ligne_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/ligne_devis/([0-9]+)" module="ligne_devis" action="by_id" vars="entreprise_id,id"/>
 
-  <route url="/ligne_deviss(\?.+=.+)*" module="ligne_devis" action="list" vars="params"/>
   <route url="/ligne_devis/list(\?.+=.+)*" module="ligne_devis" action="list" vars="params"/>
   <route url="/ligne_devis(\?.+=.+)*" module="ligne_devis" action="create" vars="params"/>
   <route url="/ligne_devis/create(\?.+=.+)*" module="ligne_devis" action="create" vars="params"/>
@@ -252,25 +242,21 @@
   <route url="/role/create(\?.+=.+)*" module="role" action="create" vars="params"/>
   <route url="/role/([0-9+])(\?.+=.+)*" module="role" action="by_id" vars="id,params"/>
 
-  <route url="/entreprise/([0-9]+)/statut_deviss(\?.+=.+)*" module="statut_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/statut_devis/list(\?.+=.+)*" module="statut_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/statut_devis(\?.+=.+)*" module="statut_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/statut_devis/create(\?.+=.+)*" module="statut_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/statut_devis/([0-9]+)" module="statut_devis" action="by_id" vars="entreprise_id,id"/>
 
-  <route url="/statut_deviss(\?.+=.+)*" module="statut_devis" action="list" vars="params"/>
   <route url="/statut_devis/list(\?.+=.+)*" module="statut_devis" action="list" vars="params"/>
   <route url="/statut_devis(\?.+=.+)*" module="statut_devis" action="create" vars="params"/>
   <route url="/statut_devis/create(\?.+=.+)*" module="statut_devis" action="create" vars="params"/>
   <route url="/statut_devis/([0-9+])(\?.+=.+)*" module="statut_devis" action="by_id" vars="id,params"/>
 
-  <route url="/entreprise/([0-9]+)/total_tva_deviss(\?.+=.+)*" module="total_tva_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/total_tva_devis/list(\?.+=.+)*" module="total_tva_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/total_tva_devis(\?.+=.+)*" module="total_tva_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/total_tva_devis/create(\?.+=.+)*" module="total_tva_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/total_tva_devis/([0-9]+)" module="total_tva_devis" action="by_id" vars="entreprise_id,id"/>
 
-  <route url="/total_tva_deviss(\?.+=.+)*" module="total_tva_devis" action="list" vars="params"/>
   <route url="/total_tva_devis/list(\?.+=.+)*" module="total_tva_devis" action="list" vars="params"/>
   <route url="/total_tva_devis(\?.+=.+)*" module="total_tva_devis" action="create" vars="params"/>
   <route url="/total_tva_devis/create(\?.+=.+)*" module="total_tva_devis" action="create" vars="params"/>
@@ -288,13 +274,11 @@
   <route url="/total_tva_facture/create(\?.+=.+)*" module="total_tva_facture" action="create" vars="params"/>
   <route url="/total_tva_facture/([0-9+])(\?.+=.+)*" module="total_tva_facture" action="by_id" vars="id,params"/>
 
-  <route url="/entreprise/([0-9]+)/tranche_deviss(\?.+=.+)*" module="tranche_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/tranche_devis/list(\?.+=.+)*" module="tranche_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/tranche_devis(\?.+=.+)*" module="tranche_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/tranche_devis/create(\?.+=.+)*" module="tranche_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/tranche_devis/([0-9]+)" module="tranche_devis" action="by_id" vars="entreprise_id,id"/>
 
-  <route url="/tranche_deviss(\?.+=.+)*" module="tranche_devis" action="list" vars="params"/>
   <route url="/tranche_devis/list(\?.+=.+)*" module="tranche_devis" action="list" vars="params"/>
   <route url="/tranche_devis(\?.+=.+)*" module="tranche_devis" action="create" vars="params"/>
   <route url="/tranche_devis/create(\?.+=.+)*" module="tranche_devis" action="create" vars="params"/>
