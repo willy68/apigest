@@ -5,7 +5,7 @@ namespace Applications\\' . $app . '\Modules\\' . $model_class . ';
 class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules\ApiController
 	{
 
-		private function getList(\Library\HTTPRequest $request)
+		protected function getList(\Library\HTTPRequest $request)
 		{
 			$options = array();
 
@@ -21,7 +21,17 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				$options[\'order\'] = $request->getData(\'order\');
 			}
 
-			$' . $model_name . 's = \\' . $model_class . '::all($options);
+			try {
+        if (!empty($options)) {
+          $' . $model_name . 's = \\' . $model_class . '::all($options);
+        } else {
+          $' . $model_name . 's = \\' . $model_class . '::all();
+        }
+			} catch (\ActiveRecord\RecordNotFound $e) {
+				header(\'HTTP/1.1 404 Not Found\');
+				$this->page->setOutput(\'User role not found on this server\');
+				return;
+			}
 
 			if (empty($' . $model_name . 's))
 			{
@@ -35,7 +45,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 			$this->page->setOutput($json);
 		}
 
-		private function create(\Library\HTTPRequest $request)
+		protected function create(\Library\HTTPRequest $request)
 		{
       /*$user = \User::find_by_email(array( \'email\' => $request->postData(\'email\')));
       if ($user) {
@@ -59,7 +69,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 			}
 		}
 
-		private function get(\Library\HTTPRequest $request)
+		protected function get(\Library\HTTPRequest $request)
 		{
 			try {
 				$' . $model_name . ' = \\' . $model_class . '::find($request->getData(\'id\'));
@@ -78,7 +88,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 
 		}
 
-		private function update(\Library\HTTPRequest $request)
+		protected function update(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData(\'id\');
 
@@ -102,7 +112,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 			
 		}
 		
-		private function delete(\Library\HTTPRequest $request)
+		protected function delete(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData(\'id\');
 

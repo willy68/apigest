@@ -112,7 +112,7 @@ class ApiController extends \Applications\Frontend\BackController
    * @param \Library\HTTPRequest $request
    * @return void
    */
-  public function getList(\Library\HTTPRequest $request)
+  protected function getList(\Library\HTTPRequest $request)
   { }
   
   /**
@@ -134,7 +134,7 @@ class ApiController extends \Applications\Frontend\BackController
    * @param \Library\HTTPRequest $request
    * @return void
    */
-  public function create(\Library\HTTPRequest $request)
+  protected function create(\Library\HTTPRequest $request)
   { }
 
   /**
@@ -174,7 +174,7 @@ class ApiController extends \Applications\Frontend\BackController
    * @param \Library\HTTPRequest $request
    * @return void
    */
-  public function get(\Library\HTTPRequest $request)
+  protected function get(\Library\HTTPRequest $request)
   { }
 
   /**
@@ -183,7 +183,7 @@ class ApiController extends \Applications\Frontend\BackController
    * @param \Library\HTTPRequest $request
    * @return void
    */
-  public function update(\Library\HTTPRequest $request)
+  protected function update(\Library\HTTPRequest $request)
   { }
 
   /**
@@ -192,6 +192,6 @@ class ApiController extends \Applications\Frontend\BackController
    * @param \Library\HTTPRequest $request
    * @return void
    */
-  public function delete(\Library\HTTPRequest $request)
+  protected function delete(\Library\HTTPRequest $request)
   { }
 }
