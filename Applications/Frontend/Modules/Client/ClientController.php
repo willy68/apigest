@@ -1,34 +1,15 @@
 <?php
-	namespace Applications\Frontend\Modules\Client;
+namespace Applications\Frontend\Modules\Client;
 
-	class ClientController extends \Applications\Frontend\BackController
+class ClientController extends \Applications\Frontend\Modules\ApiController
 	{
 
-		public function beforeList(\Library\HTTPRequest $request)
-		{
-			//Test if user can list or create clients with token
-				if (!$this->isAuthorized()) {
-					header('HTTP/1.1 401 Unauthorized');
-					exit('Utilisateur non authentifié');
-				}
-		}
-
-		public function executeList(\Library\HTTPRequest $request)
-		{
-			if($this->method === 'GET') {
-				$this->getClientsList($request);
-			}
-			else if ($this->method === 'POST') {
-				$this->createClient($request);
-			}
-		}
-
-		private function getClientsList(\Library\HTTPRequest $request)
+		protected function getList(\Library\HTTPRequest $request)
 		{
 			$options = array();
 
 			if ($request->getExists('id')) {
-				$options['id'] = $request->getData('id');
+			  $options['entreprise_id'] = $request->getData('entreprise_id');
 			}
 
 			if ($request->getExists('limit')) {
@@ -39,53 +20,56 @@
 				$options['order'] = $request->getData('order');
 			}
 
-			$clients = \Client::all($options);
+			try {
+        if (!empty($options)) {
+          $clients = \Client::all($options);
+        } else {
+          $clients = \Client::all();
+        }
+			} catch (\ActiveRecord\RecordNotFound $e) {
+				header('HTTP/1.1 404 Not Found');
+				$this->page->setOutput('User role not found on this server');
+				return;
+			}
 
 			if (empty($clients))
 			{
 				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('Clients not found on this server');
+				$this->page->setOutput('Aucunes clients trouvées sur ce serveur');
 				return;
 			}
 
-			$i = 0;
-			foreach ( $clients as $client ) {
-				$js = $client->to_json ();
-				if ($i !== 0)
-					$json .= "," . $js;
-				else
-					$json = $js;
-				$i ++;
-			}
+      $json = $this->jsonArray($clients);
 			header ( 'Content-Type: application/json; charset=UTF-8' );
-			$this->page->setOutput("[" . $json . "]");
+			$this->page->setOutput($json);
 		}
 
-		private function createClient(\Library\HTTPRequest $request)
+		protected function create(\Library\HTTPRequest $request)
 		{
-			$client = \Client::find_by_code_client(array( 'code_client' => $request->postData('code_client')));
-			if ($client) {
-				header('HTTP/1.1 403 Forbiden');
-				exit ('Code client ' . $request->postData('code_client') . ' allready exists');
-			}
+      /*$user = \User::find_by_email(array( 'email' => $request->postData('email')));
+      if ($user) {
+          header('HTTP/1.1 403 Forbiden');
+          exit('Email ' . $request->postData('email') . ' allready exists');
+      }*/
 
-			$client = new \Client();
+      $client = new \Client();
 
-			$client->set_attributes(array(
-								'entreprise_id' => $request->postData('entreprise_id'),
-								'code_client' => $request->postData('code_client'),
-								'civilite' => $request->postData('civilite'),
-								'nom' => $request->postData('nom'),
-								'prenom' => $request->postData('prenom'),
-								'tel' => $request->postData('tel'),
-								'portable' => $request->postData('portable'),
-								'email' => $request->postData("email"),
-								'tva_intracom' => $request->postData('tva_intracom')
-			      ));
+			$client->set_attributes(array(/*
+    'entreprise_id' => $request->postData('entreprise_id'),
+    'code_client' => $request->postData('code_client'),
+    'civilite' => $request->postData('civilite'),
+    'nom' => $request->postData('nom'),
+    'prenom' => $request->postData('prenom'),
+    'tel' => $request->postData('tel'),
+    'portable' => $request->postData('portable'),
+    'email' => $request->postData('email'),
+    'tva_intracom' => $request->postData('tva_intracom')
+*/
+							));
 
 			if ($client->save())
 			{
-				header ( 'Content-Type: application/json; charset=UTF-8' );
+				header ('Content-Type: application/json; charset=UTF-8');
 				$this->page->setOutput($client->to_json());
 			} else {
 				header('HTTP/1.1 400 Bad request');
@@ -93,29 +77,7 @@
 			}
 		}
 
-		public function beforeBy_id(\Library\HTTPRequest $request)
-		{
-			//Test if user can get, update or delete a user with token
-			if (!$this->isAuthorized()) {
-				header('HTTP/1.1 401 Unauthorized');
-				exit('Utilisateur non authentifié');
-			}
-		}
-
-		public function executeBy_id(\Library\HTTPRequest $request)
-		{
-			if($this->method === 'GET') {
-				$this->getClient($request);
-			}
-			else if ($this->method === 'PUT') {
-				$this->updateClient($request);
-			}
-			else if ($this->method === 'DELETE') {
-				$this->deleteClient($request);
-			}
-		}
-
-		private function getClient(\Library\HTTPRequest $request)
+		protected function get(\Library\HTTPRequest $request)
 		{
 			try {
 				$client = \Client::find($request->getData('id'));
@@ -131,10 +93,9 @@
 
 			header ( 'Content-Type: application/json; charset=UTF-8' );
 			$this->page->setOutput($json);
-
 		}
 
-		private function updateClient(\Library\HTTPRequest $request)
+		protected function update(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData('id');
 
@@ -155,10 +116,9 @@
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
 			}
-			
 		}
 		
-		private function deleteClient(\Library\HTTPRequest $request)
+		protected function delete(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData('id');
 
@@ -178,49 +138,7 @@
 			} else {
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
-			}
-			
-		}
-
-		public function beforeBy_nom(\Library\HTTPRequest $request)
-		{
-			//Test if user can get, update or delete a Client with token
-			if (!$this->isAuthorized()) {
-				header('HTTP/1.1 401 Unauthorized');
-				exit('Utilisateur non authentifié');
-			}
-		}
-
-		public function executeBy_nom(\Library\HTTPRequest $request)
-		{
-			if($this->method === 'GET') {
-				$this->getClientBy_nom($request);
-			}
-/*			else if ($this->method === 'PUT') {
-				$this->updatesClient($request);
-			}
-			else if ($this->method === 'DELETE') {
-				$this->deleteClient($request);
-			}*/
-		}
-
-		private function getClientBy_nom(\Library\HTTPRequest $request)
-		{
-			try {
-				$client = \Client::find_by_nom(array( 'nom' => $request->getData('nom')));
-			}
-			catch(\ActiveRecord\RecordNotFound $e)
-			{
-				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('Client not found on this server');
-				return;
-			}
-
-			$json = $client->to_json();
-
-			header ( 'Content-Type: application/json; charset=UTF-8' );
-			$this->page->setOutput($json);
-
+			}			
 		}
 
 	}

@@ -1,37 +1,12 @@
 <?php
-	namespace Applications\Frontend\Modules\Entreprise;
+namespace Applications\Frontend\Modules\Entreprise;
 
-	class EntrepriseController extends \Applications\Frontend\BackController
+class EntrepriseController extends \Applications\Frontend\Modules\ApiController
 	{
 
-	/*	public function beforeList(\Library\HTTPRequest $request)
-		{
-			//Test if user can list Entreprises with token
-			if ($this->method === 'GET') {
-				if (!$this->isAuthorized()) {
-					header('HTTP/1.1 401 Unauthorized');
-					exit('Utilisateur non authentifié');
-				}
-			}
-		}*/
-
-		public function executeList(\Library\HTTPRequest $request)
-		{
-			if($this->method === 'GET') {
-				$this->getEntreprisesList($request);
-			}
-			else if ($this->method === 'POST') {
-				$this->createEntreprise($request);
-			}
-		}
-
-		private function getEntreprisesList(\Library\HTTPRequest $request)
+		protected function getList(\Library\HTTPRequest $request)
 		{
 			$options = array();
-
-			if ($request->getExists('id')) {
-				$options['id'] = $request->getData('id');
-			}
 
 			if ($request->getExists('limit')) {
 				$options['limit'] = $request->getData('limit');
@@ -41,7 +16,17 @@
 				$options['order'] = $request->getData('order');
 			}
 
-			$entreprises = \Entreprise::all($options);
+			try {
+        if (!empty($options)) {
+          $entreprises = \Entreprise::all($options);
+        } else {
+          $entreprises = \Entreprise::all();
+        }
+			} catch (\ActiveRecord\RecordNotFound $e) {
+				header('HTTP/1.1 404 Not Found');
+				$this->page->setOutput('User role not found on this server');
+				return;
+			}
 
 			if (empty($entreprises))
 			{
@@ -50,46 +35,40 @@
 				return;
 			}
 
-			$i = 0;
-			foreach ( $entreprises as $entreprise ) {
-				$js = $entreprise->to_json ();
-				if ($i !== 0)
-					$json .= "," . $js;
-				else
-					$json = $js;
-				$i ++;
-			}
+      $json = $this->jsonArray($entreprises);
 			header ( 'Content-Type: application/json; charset=UTF-8' );
-			$this->page->setOutput("[" . $json . "]");
+			$this->page->setOutput($json);
 		}
 
-		private function createEntreprise(\Library\HTTPRequest $request)
+		protected function create(\Library\HTTPRequest $request)
 		{
-			$entreprise = \Entreprise::find_by_siret(array( 'siret' => $request->postData('siret')));
-			if ($entreprise) {
-				header('HTTP/1.1 403 Forbiden');
-				exit ('L\'entreprise ' . $request->postData('siret') . ' existe déjà');
-			}
+      $entreprise = \User::find_by_siret(array( 'siret' => $request->postData('siret')));
+      if ($entreprise) {
+          header('HTTP/1.1 403 Forbiden');
+          exit('L\'entreprise ' . $request->postData('siret') . ' allready exists');
+      }
 
-			$entreprise = new \Entreprise();
+      $entreprise = new \Entreprise();
 
-			$entreprise->set_attributes(array('siret' => $request->postData("siret"),
-								'nom' => $request->postData("nom"),
-								'ape' => $request->postData("ape"),
-								'tva_intracom' => $request->postData('tva_intracom'),
-								'adresse' => $request->postData('role'),
-								'suite_adresse' => $request->postData("suite_adresse"),
-								'cp' => $request->postData('cp'),
-								'ville' => $request->postData('ville'),
-								'tel' => $request->postData('tel'),
-								'portable' => $request->postData('portable'),
-								'email' => $request->postData('email'),
-								'regime_commercial' => $request->postData('regime_commercial')
-							));
+			$entreprise->set_attributes(array(
+        'siret' => $request->postData('siret'),
+        'nom' => $request->postData('nom'),
+        'ape' => $request->postData('ape'),
+        'tva_intracom' => $request->postData('tva_intracom'),
+        'adresse' => $request->postData('adresse'),
+        'suite_adresse' => $request->postData('suite_adresse'),
+        'cp' => $request->postData('cp'),
+        'ville' => $request->postData('ville'),
+        'tel' => $request->postData('tel'),
+        'portable' => $request->postData('portable'),
+        'email' => $request->postData('email'),
+        'regime_commercial' => $request->postData('regime_commercial'),
+        'logo' => $request->postData('logo')
+			));
 
 			if ($entreprise->save())
 			{
-				header ( 'Content-Type: application/json; charset=UTF-8' );
+				header ('Content-Type: application/json; charset=UTF-8');
 				$this->page->setOutput($entreprise->to_json());
 			} else {
 				header('HTTP/1.1 400 Bad request');
@@ -97,29 +76,7 @@
 			}
 		}
 
-		public function beforeBy_id(\Library\HTTPRequest $request)
-		{
-			//Test if Entreprise can get, update or delete a Entreprise with token
-			if (!$this->isAuthorized()) {
-				header('HTTP/1.1 401 Unauthorized');
-				exit('Utilisateur non authentifié');
-			}
-		}
-
-		public function executeBy_id(\Library\HTTPRequest $request)
-		{
-			if($this->method === 'GET') {
-				$this->getEntreprise($request);
-			}
-			else if ($this->method === 'PUT') {
-				$this->updateEntreprise($request);
-			}
-			else if ($this->method === 'DELETE') {
-				$this->deleteEntreprise($request);
-			}
-		}
-
-		private function getEntreprise(\Library\HTTPRequest $request)
+		protected function get(\Library\HTTPRequest $request)
 		{
 			try {
 				$entreprise = \Entreprise::find($request->getData('id'));
@@ -135,10 +92,9 @@
 
 			header ( 'Content-Type: application/json; charset=UTF-8' );
 			$this->page->setOutput($json);
-
 		}
 
-		private function updateEntreprise(\Library\HTTPRequest $request)
+		protected function update(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData('id');
 
@@ -159,10 +115,9 @@
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
 			}
-			
 		}
 		
-		private function deleteEntreprise(\Library\HTTPRequest $request)
+		protected function delete(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData('id');
 
@@ -182,49 +137,7 @@
 			} else {
 				header('HTTP/1.1 400 Bad request');
 				$this->page->setOutput('400 Bad request');
-			}
-			
-		}
-
-		public function beforeBy_name(\Library\HTTPRequest $request)
-		{
-			//Test if Entreprise can get, update or delete a Entreprise with token
-			if (!$this->isAuthorized()) {
-				header('HTTP/1.1 401 Unauthorized');
-				exit('Utilisateur non authentifié');
-			}
-		}
-
-		public function executeBy_name(\Library\HTTPRequest $request)
-		{
-			if($this->method === 'GET') {
-				$this->getEntrepriseBy_name($request);
-			}
-/*			else if ($this->method === 'PUT') {
-				$this->updatesEntreprise($request);
-			}
-			else if ($this->method === 'DELETE') {
-				$this->deleteEntreprise($request);
-			}*/
-		}
-
-		private function getEntrepriseBy_name(\Library\HTTPRequest $request)
-		{
-			try {
-				$entreprise = \Entreprise::find_by_name(array( 'nom' => $request->getData('nom')));
-			}
-			catch(\ActiveRecord\RecordNotFound $e)
-			{
-				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('Entreprise not found on this server');
-				return;
-			}
-
-			$json = $entreprise->to_json();
-
-			header ( 'Content-Type: application/json; charset=UTF-8' );
-			$this->page->setOutput($json);
-
+			}			
 		}
 
 	}
