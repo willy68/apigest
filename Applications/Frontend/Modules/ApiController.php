@@ -42,6 +42,18 @@ class ApiController extends \Applications\Frontend\BackController
   }
 
   /**
+   * Surcharge la fonction de la classe \Library\Controller
+   * Aucune vue associé, ne fait donc rien
+   *
+   * @param string $view
+   * @return void
+   */
+  public function setView($view)
+  {
+    
+  }
+
+  /**
    * Transform le tableau $record
    * en un tableau d'objets json
    * 
@@ -63,7 +75,8 @@ class ApiController extends \Applications\Frontend\BackController
   }
 
   /**
-   * Test si l'utilisateur peut lister la table de données
+   * Test si l'utilisateur peut lister les enregistrements de la table
+   * par la methode GET
    *
    * @param \Library\HTTPRequest $request
    * @return void
@@ -101,6 +114,19 @@ class ApiController extends \Applications\Frontend\BackController
    */
   public function getList(\Library\HTTPRequest $request)
   { }
+  
+  /**
+   * Execute l'action 'create' suivant la methode POST
+   *
+   * @param \Library\HTTPRequest $request
+   * @return void
+   */
+  public function executeCreate(\Library\HTTPRequest $request)
+  {
+    if ($this->method === 'POST') {
+      $this->create($request);
+    }
+  }
 
   /**
    * Crée un enregistrement
