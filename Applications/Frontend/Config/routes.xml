@@ -1,10 +1,352 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <routes>
-    <route url="/entreprise(\?.+=.+)*" module="entreprise" action="list" vars="params"/>
-    <route url="/entreprise/([0-9]+)(\?.+=.+)*" module="entreprise" action="by_id" vars="entreprise_id,params"/>
-    <route url="/entreprise/([0-9]+)/user/login" module="user" action="login" vars="entreprise_id"/>
-    <route url="/entreprise/([0-9]+)/user(\?.+=.+)*" module="user" action="list" vars="entreprise_id,params"/>
-    <route url="/entreprise/([0-9]+)/user/([0-9]+)" module="user" action="by_id" vars="entreprise_id,id"/>
-    <route url="/user(\?.+=.+)*" module="user" action="list" vars="params"/>
-    <route url="/role(\?.+=.+)*" module="user" action="roleList" vars="params"/>
+  <route url="/entreprise/([0-9]+)/adresses(\?.+=.+)*" module="adresse" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse/list(\?.+=.+)*" module="adresse" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse(\?.+=.+)*" module="adresse" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse/create(\?.+=.+)*" module="adresse" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse/([0-9]+)" module="adresse" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/adresses(\?.+=.+)*" module="adresse" action="list" vars="params"/>
+  <route url="/adresse/list(\?.+=.+)*" module="adresse" action="list" vars="params"/>
+  <route url="/adresse(\?.+=.+)*" module="adresse" action="create" vars="params"/>
+  <route url="/adresse/create(\?.+=.+)*" module="adresse" action="create" vars="params"/>
+  <route url="/adresse/([0-9+])(\?.+=.+)*" module="adresse" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/adresse_types(\?.+=.+)*" module="adresse_type" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse_type/list(\?.+=.+)*" module="adresse_type" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse_type(\?.+=.+)*" module="adresse_type" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse_type/create(\?.+=.+)*" module="adresse_type" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/adresse_type/([0-9]+)" module="adresse_type" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/adresse_types(\?.+=.+)*" module="adresse_type" action="list" vars="params"/>
+  <route url="/adresse_type/list(\?.+=.+)*" module="adresse_type" action="list" vars="params"/>
+  <route url="/adresse_type(\?.+=.+)*" module="adresse_type" action="create" vars="params"/>
+  <route url="/adresse_type/create(\?.+=.+)*" module="adresse_type" action="create" vars="params"/>
+  <route url="/adresse_type/([0-9+])(\?.+=.+)*" module="adresse_type" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/articles(\?.+=.+)*" module="article" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/article/list(\?.+=.+)*" module="article" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/article(\?.+=.+)*" module="article" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/article/create(\?.+=.+)*" module="article" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/article/([0-9]+)" module="article" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/articles(\?.+=.+)*" module="article" action="list" vars="params"/>
+  <route url="/article/list(\?.+=.+)*" module="article" action="list" vars="params"/>
+  <route url="/article(\?.+=.+)*" module="article" action="create" vars="params"/>
+  <route url="/article/create(\?.+=.+)*" module="article" action="create" vars="params"/>
+  <route url="/article/([0-9+])(\?.+=.+)*" module="article" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/civilites(\?.+=.+)*" module="civilite" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/civilite/list(\?.+=.+)*" module="civilite" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/civilite(\?.+=.+)*" module="civilite" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/civilite/create(\?.+=.+)*" module="civilite" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/civilite/([0-9]+)" module="civilite" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/civilites(\?.+=.+)*" module="civilite" action="list" vars="params"/>
+  <route url="/civilite/list(\?.+=.+)*" module="civilite" action="list" vars="params"/>
+  <route url="/civilite(\?.+=.+)*" module="civilite" action="create" vars="params"/>
+  <route url="/civilite/create(\?.+=.+)*" module="civilite" action="create" vars="params"/>
+  <route url="/civilite/([0-9+])(\?.+=.+)*" module="civilite" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/clients(\?.+=.+)*" module="client" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/client/list(\?.+=.+)*" module="client" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/client(\?.+=.+)*" module="client" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/client/create(\?.+=.+)*" module="client" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/client/([0-9]+)" module="client" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/clients(\?.+=.+)*" module="client" action="list" vars="params"/>
+  <route url="/client/list(\?.+=.+)*" module="client" action="list" vars="params"/>
+  <route url="/client(\?.+=.+)*" module="client" action="create" vars="params"/>
+  <route url="/client/create(\?.+=.+)*" module="client" action="create" vars="params"/>
+  <route url="/client/([0-9+])(\?.+=.+)*" module="client" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/contrats(\?.+=.+)*" module="contrat" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/contrat/list(\?.+=.+)*" module="contrat" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/contrat(\?.+=.+)*" module="contrat" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/contrat/create(\?.+=.+)*" module="contrat" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/contrat/([0-9]+)" module="contrat" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/contrats(\?.+=.+)*" module="contrat" action="list" vars="params"/>
+  <route url="/contrat/list(\?.+=.+)*" module="contrat" action="list" vars="params"/>
+  <route url="/contrat(\?.+=.+)*" module="contrat" action="create" vars="params"/>
+  <route url="/contrat/create(\?.+=.+)*" module="contrat" action="create" vars="params"/>
+  <route url="/contrat/([0-9+])(\?.+=.+)*" module="contrat" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/dernier_codes(\?.+=.+)*" module="dernier_code" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/dernier_code/list(\?.+=.+)*" module="dernier_code" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/dernier_code(\?.+=.+)*" module="dernier_code" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/dernier_code/create(\?.+=.+)*" module="dernier_code" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/dernier_code/([0-9]+)" module="dernier_code" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/dernier_codes(\?.+=.+)*" module="dernier_code" action="list" vars="params"/>
+  <route url="/dernier_code/list(\?.+=.+)*" module="dernier_code" action="list" vars="params"/>
+  <route url="/dernier_code(\?.+=.+)*" module="dernier_code" action="create" vars="params"/>
+  <route url="/dernier_code/create(\?.+=.+)*" module="dernier_code" action="create" vars="params"/>
+  <route url="/dernier_code/([0-9+])(\?.+=.+)*" module="dernier_code" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/deviss(\?.+=.+)*" module="devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/devis/list(\?.+=.+)*" module="devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/devis(\?.+=.+)*" module="devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/devis/create(\?.+=.+)*" module="devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/devis/([0-9]+)" module="devis" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/deviss(\?.+=.+)*" module="devis" action="list" vars="params"/>
+  <route url="/devis/list(\?.+=.+)*" module="devis" action="list" vars="params"/>
+  <route url="/devis(\?.+=.+)*" module="devis" action="create" vars="params"/>
+  <route url="/devis/create(\?.+=.+)*" module="devis" action="create" vars="params"/>
+  <route url="/devis/([0-9+])(\?.+=.+)*" module="devis" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/echeances(\?.+=.+)*" module="echeance" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/echeance/list(\?.+=.+)*" module="echeance" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/echeance(\?.+=.+)*" module="echeance" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/echeance/create(\?.+=.+)*" module="echeance" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/echeance/([0-9]+)" module="echeance" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/echeances(\?.+=.+)*" module="echeance" action="list" vars="params"/>
+  <route url="/echeance/list(\?.+=.+)*" module="echeance" action="list" vars="params"/>
+  <route url="/echeance(\?.+=.+)*" module="echeance" action="create" vars="params"/>
+  <route url="/echeance/create(\?.+=.+)*" module="echeance" action="create" vars="params"/>
+  <route url="/echeance/([0-9+])(\?.+=.+)*" module="echeance" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/entreprises(\?.+=.+)*" module="entreprise" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/entreprise/list(\?.+=.+)*" module="entreprise" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/entreprise(\?.+=.+)*" module="entreprise" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/entreprise/create(\?.+=.+)*" module="entreprise" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/entreprise/([0-9]+)" module="entreprise" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/entreprises(\?.+=.+)*" module="entreprise" action="list" vars="params"/>
+  <route url="/entreprise/list(\?.+=.+)*" module="entreprise" action="list" vars="params"/>
+  <route url="/entreprise(\?.+=.+)*" module="entreprise" action="create" vars="params"/>
+  <route url="/entreprise/create(\?.+=.+)*" module="entreprise" action="create" vars="params"/>
+  <route url="/entreprise/([0-9+])(\?.+=.+)*" module="entreprise" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/factures(\?.+=.+)*" module="facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture/list(\?.+=.+)*" module="facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture(\?.+=.+)*" module="facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture/create(\?.+=.+)*" module="facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture/([0-9]+)" module="facture" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/factures(\?.+=.+)*" module="facture" action="list" vars="params"/>
+  <route url="/facture/list(\?.+=.+)*" module="facture" action="list" vars="params"/>
+  <route url="/facture(\?.+=.+)*" module="facture" action="create" vars="params"/>
+  <route url="/facture/create(\?.+=.+)*" module="facture" action="create" vars="params"/>
+  <route url="/facture/([0-9+])(\?.+=.+)*" module="facture" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/facture_periodiques(\?.+=.+)*" module="facture_periodique" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture_periodique/list(\?.+=.+)*" module="facture_periodique" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture_periodique(\?.+=.+)*" module="facture_periodique" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture_periodique/create(\?.+=.+)*" module="facture_periodique" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/facture_periodique/([0-9]+)" module="facture_periodique" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/facture_periodiques(\?.+=.+)*" module="facture_periodique" action="list" vars="params"/>
+  <route url="/facture_periodique/list(\?.+=.+)*" module="facture_periodique" action="list" vars="params"/>
+  <route url="/facture_periodique(\?.+=.+)*" module="facture_periodique" action="create" vars="params"/>
+  <route url="/facture_periodique/create(\?.+=.+)*" module="facture_periodique" action="create" vars="params"/>
+  <route url="/facture_periodique/([0-9+])(\?.+=.+)*" module="facture_periodique" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/famille_articles(\?.+=.+)*" module="famille_article" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/famille_article/list(\?.+=.+)*" module="famille_article" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/famille_article(\?.+=.+)*" module="famille_article" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/famille_article/create(\?.+=.+)*" module="famille_article" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/famille_article/([0-9]+)" module="famille_article" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/famille_articles(\?.+=.+)*" module="famille_article" action="list" vars="params"/>
+  <route url="/famille_article/list(\?.+=.+)*" module="famille_article" action="list" vars="params"/>
+  <route url="/famille_article(\?.+=.+)*" module="famille_article" action="create" vars="params"/>
+  <route url="/famille_article/create(\?.+=.+)*" module="famille_article" action="create" vars="params"/>
+  <route url="/famille_article/([0-9+])(\?.+=.+)*" module="famille_article" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/ligne_deviss(\?.+=.+)*" module="ligne_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_devis/list(\?.+=.+)*" module="ligne_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_devis(\?.+=.+)*" module="ligne_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_devis/create(\?.+=.+)*" module="ligne_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_devis/([0-9]+)" module="ligne_devis" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/ligne_deviss(\?.+=.+)*" module="ligne_devis" action="list" vars="params"/>
+  <route url="/ligne_devis/list(\?.+=.+)*" module="ligne_devis" action="list" vars="params"/>
+  <route url="/ligne_devis(\?.+=.+)*" module="ligne_devis" action="create" vars="params"/>
+  <route url="/ligne_devis/create(\?.+=.+)*" module="ligne_devis" action="create" vars="params"/>
+  <route url="/ligne_devis/([0-9+])(\?.+=.+)*" module="ligne_devis" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/ligne_factures(\?.+=.+)*" module="ligne_facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture/list(\?.+=.+)*" module="ligne_facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture(\?.+=.+)*" module="ligne_facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture/create(\?.+=.+)*" module="ligne_facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture/([0-9]+)" module="ligne_facture" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/ligne_factures(\?.+=.+)*" module="ligne_facture" action="list" vars="params"/>
+  <route url="/ligne_facture/list(\?.+=.+)*" module="ligne_facture" action="list" vars="params"/>
+  <route url="/ligne_facture(\?.+=.+)*" module="ligne_facture" action="create" vars="params"/>
+  <route url="/ligne_facture/create(\?.+=.+)*" module="ligne_facture" action="create" vars="params"/>
+  <route url="/ligne_facture/([0-9+])(\?.+=.+)*" module="ligne_facture" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/ligne_facture_periodiques(\?.+=.+)*" module="ligne_facture_periodique" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture_periodique/list(\?.+=.+)*" module="ligne_facture_periodique" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture_periodique(\?.+=.+)*" module="ligne_facture_periodique" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture_periodique/create(\?.+=.+)*" module="ligne_facture_periodique" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/ligne_facture_periodique/([0-9]+)" module="ligne_facture_periodique" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/ligne_facture_periodiques(\?.+=.+)*" module="ligne_facture_periodique" action="list" vars="params"/>
+  <route url="/ligne_facture_periodique/list(\?.+=.+)*" module="ligne_facture_periodique" action="list" vars="params"/>
+  <route url="/ligne_facture_periodique(\?.+=.+)*" module="ligne_facture_periodique" action="create" vars="params"/>
+  <route url="/ligne_facture_periodique/create(\?.+=.+)*" module="ligne_facture_periodique" action="create" vars="params"/>
+  <route url="/ligne_facture_periodique/([0-9+])(\?.+=.+)*" module="ligne_facture_periodique" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/periodicites(\?.+=.+)*" module="periodicite" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/periodicite/list(\?.+=.+)*" module="periodicite" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/periodicite(\?.+=.+)*" module="periodicite" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/periodicite/create(\?.+=.+)*" module="periodicite" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/periodicite/([0-9]+)" module="periodicite" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/periodicites(\?.+=.+)*" module="periodicite" action="list" vars="params"/>
+  <route url="/periodicite/list(\?.+=.+)*" module="periodicite" action="list" vars="params"/>
+  <route url="/periodicite(\?.+=.+)*" module="periodicite" action="create" vars="params"/>
+  <route url="/periodicite/create(\?.+=.+)*" module="periodicite" action="create" vars="params"/>
+  <route url="/periodicite/([0-9+])(\?.+=.+)*" module="periodicite" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/prefixs(\?.+=.+)*" module="prefix" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/prefix/list(\?.+=.+)*" module="prefix" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/prefix(\?.+=.+)*" module="prefix" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/prefix/create(\?.+=.+)*" module="prefix" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/prefix/([0-9]+)" module="prefix" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/prefixs(\?.+=.+)*" module="prefix" action="list" vars="params"/>
+  <route url="/prefix/list(\?.+=.+)*" module="prefix" action="list" vars="params"/>
+  <route url="/prefix(\?.+=.+)*" module="prefix" action="create" vars="params"/>
+  <route url="/prefix/create(\?.+=.+)*" module="prefix" action="create" vars="params"/>
+  <route url="/prefix/([0-9+])(\?.+=.+)*" module="prefix" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/reglements(\?.+=.+)*" module="reglement" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/reglement/list(\?.+=.+)*" module="reglement" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/reglement(\?.+=.+)*" module="reglement" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/reglement/create(\?.+=.+)*" module="reglement" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/reglement/([0-9]+)" module="reglement" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/reglements(\?.+=.+)*" module="reglement" action="list" vars="params"/>
+  <route url="/reglement/list(\?.+=.+)*" module="reglement" action="list" vars="params"/>
+  <route url="/reglement(\?.+=.+)*" module="reglement" action="create" vars="params"/>
+  <route url="/reglement/create(\?.+=.+)*" module="reglement" action="create" vars="params"/>
+  <route url="/reglement/([0-9+])(\?.+=.+)*" module="reglement" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/ribs(\?.+=.+)*" module="rib" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/rib/list(\?.+=.+)*" module="rib" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/rib(\?.+=.+)*" module="rib" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/rib/create(\?.+=.+)*" module="rib" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/rib/([0-9]+)" module="rib" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/ribs(\?.+=.+)*" module="rib" action="list" vars="params"/>
+  <route url="/rib/list(\?.+=.+)*" module="rib" action="list" vars="params"/>
+  <route url="/rib(\?.+=.+)*" module="rib" action="create" vars="params"/>
+  <route url="/rib/create(\?.+=.+)*" module="rib" action="create" vars="params"/>
+  <route url="/rib/([0-9+])(\?.+=.+)*" module="rib" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/roles(\?.+=.+)*" module="role" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/role/list(\?.+=.+)*" module="role" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/role(\?.+=.+)*" module="role" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/role/create(\?.+=.+)*" module="role" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/role/([0-9]+)" module="role" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/roles(\?.+=.+)*" module="role" action="list" vars="params"/>
+  <route url="/role/list(\?.+=.+)*" module="role" action="list" vars="params"/>
+  <route url="/role(\?.+=.+)*" module="role" action="create" vars="params"/>
+  <route url="/role/create(\?.+=.+)*" module="role" action="create" vars="params"/>
+  <route url="/role/([0-9+])(\?.+=.+)*" module="role" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/statut_deviss(\?.+=.+)*" module="statut_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/statut_devis/list(\?.+=.+)*" module="statut_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/statut_devis(\?.+=.+)*" module="statut_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/statut_devis/create(\?.+=.+)*" module="statut_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/statut_devis/([0-9]+)" module="statut_devis" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/statut_deviss(\?.+=.+)*" module="statut_devis" action="list" vars="params"/>
+  <route url="/statut_devis/list(\?.+=.+)*" module="statut_devis" action="list" vars="params"/>
+  <route url="/statut_devis(\?.+=.+)*" module="statut_devis" action="create" vars="params"/>
+  <route url="/statut_devis/create(\?.+=.+)*" module="statut_devis" action="create" vars="params"/>
+  <route url="/statut_devis/([0-9+])(\?.+=.+)*" module="statut_devis" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/total_tva_deviss(\?.+=.+)*" module="total_tva_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_devis/list(\?.+=.+)*" module="total_tva_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_devis(\?.+=.+)*" module="total_tva_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_devis/create(\?.+=.+)*" module="total_tva_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_devis/([0-9]+)" module="total_tva_devis" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/total_tva_deviss(\?.+=.+)*" module="total_tva_devis" action="list" vars="params"/>
+  <route url="/total_tva_devis/list(\?.+=.+)*" module="total_tva_devis" action="list" vars="params"/>
+  <route url="/total_tva_devis(\?.+=.+)*" module="total_tva_devis" action="create" vars="params"/>
+  <route url="/total_tva_devis/create(\?.+=.+)*" module="total_tva_devis" action="create" vars="params"/>
+  <route url="/total_tva_devis/([0-9+])(\?.+=.+)*" module="total_tva_devis" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/total_tva_factures(\?.+=.+)*" module="total_tva_facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_facture/list(\?.+=.+)*" module="total_tva_facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_facture(\?.+=.+)*" module="total_tva_facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_facture/create(\?.+=.+)*" module="total_tva_facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/total_tva_facture/([0-9]+)" module="total_tva_facture" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/total_tva_factures(\?.+=.+)*" module="total_tva_facture" action="list" vars="params"/>
+  <route url="/total_tva_facture/list(\?.+=.+)*" module="total_tva_facture" action="list" vars="params"/>
+  <route url="/total_tva_facture(\?.+=.+)*" module="total_tva_facture" action="create" vars="params"/>
+  <route url="/total_tva_facture/create(\?.+=.+)*" module="total_tva_facture" action="create" vars="params"/>
+  <route url="/total_tva_facture/([0-9+])(\?.+=.+)*" module="total_tva_facture" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/tranche_deviss(\?.+=.+)*" module="tranche_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_devis/list(\?.+=.+)*" module="tranche_devis" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_devis(\?.+=.+)*" module="tranche_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_devis/create(\?.+=.+)*" module="tranche_devis" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_devis/([0-9]+)" module="tranche_devis" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/tranche_deviss(\?.+=.+)*" module="tranche_devis" action="list" vars="params"/>
+  <route url="/tranche_devis/list(\?.+=.+)*" module="tranche_devis" action="list" vars="params"/>
+  <route url="/tranche_devis(\?.+=.+)*" module="tranche_devis" action="create" vars="params"/>
+  <route url="/tranche_devis/create(\?.+=.+)*" module="tranche_devis" action="create" vars="params"/>
+  <route url="/tranche_devis/([0-9+])(\?.+=.+)*" module="tranche_devis" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/tranche_factures(\?.+=.+)*" module="tranche_facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture/list(\?.+=.+)*" module="tranche_facture" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture(\?.+=.+)*" module="tranche_facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture/create(\?.+=.+)*" module="tranche_facture" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture/([0-9]+)" module="tranche_facture" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/tranche_factures(\?.+=.+)*" module="tranche_facture" action="list" vars="params"/>
+  <route url="/tranche_facture/list(\?.+=.+)*" module="tranche_facture" action="list" vars="params"/>
+  <route url="/tranche_facture(\?.+=.+)*" module="tranche_facture" action="create" vars="params"/>
+  <route url="/tranche_facture/create(\?.+=.+)*" module="tranche_facture" action="create" vars="params"/>
+  <route url="/tranche_facture/([0-9+])(\?.+=.+)*" module="tranche_facture" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/tranche_facture_periodiques(\?.+=.+)*" module="tranche_facture_periodique" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture_periodique/list(\?.+=.+)*" module="tranche_facture_periodique" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture_periodique(\?.+=.+)*" module="tranche_facture_periodique" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture_periodique/create(\?.+=.+)*" module="tranche_facture_periodique" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tranche_facture_periodique/([0-9]+)" module="tranche_facture_periodique" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/tranche_facture_periodiques(\?.+=.+)*" module="tranche_facture_periodique" action="list" vars="params"/>
+  <route url="/tranche_facture_periodique/list(\?.+=.+)*" module="tranche_facture_periodique" action="list" vars="params"/>
+  <route url="/tranche_facture_periodique(\?.+=.+)*" module="tranche_facture_periodique" action="create" vars="params"/>
+  <route url="/tranche_facture_periodique/create(\?.+=.+)*" module="tranche_facture_periodique" action="create" vars="params"/>
+  <route url="/tranche_facture_periodique/([0-9+])(\?.+=.+)*" module="tranche_facture_periodique" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/tvas(\?.+=.+)*" module="tva" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tva/list(\?.+=.+)*" module="tva" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tva(\?.+=.+)*" module="tva" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tva/create(\?.+=.+)*" module="tva" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/tva/([0-9]+)" module="tva" action="by_id" vars="entreprise_id,id"/>
+
+  <route url="/tvas(\?.+=.+)*" module="tva" action="list" vars="params"/>
+  <route url="/tva/list(\?.+=.+)*" module="tva" action="list" vars="params"/>
+  <route url="/tva(\?.+=.+)*" module="tva" action="create" vars="params"/>
+  <route url="/tva/create(\?.+=.+)*" module="tva" action="create" vars="params"/>
+  <route url="/tva/([0-9+])(\?.+=.+)*" module="tva" action="by_id" vars="id,params"/>
+
+  <route url="/entreprise/([0-9]+)/users(\?.+=.+)*" module="user" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/user/list(\?.+=.+)*" module="user" action="list" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/user(\?.+=.+)*" module="user" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/user/create(\?.+=.+)*" module="user" action="create" vars="entreprise_id,params"/>
+  <route url="/entreprise/([0-9]+)/user/([0-9]+)" module="user" action="by_id" vars="entreprise_id,id"/>
+  <route url="/entreprise/([0-9]+)/user/login" module="user" action="login" vars="entreprise_id"/>
+
+  <route url="/users(\?.+=.+)*" module="user" action="list" vars="params"/>
+  <route url="/user/list(\?.+=.+)*" module="user" action="list" vars="params"/>
+  <route url="/user(\?.+=.+)*" module="user" action="create" vars="params"/>
+  <route url="/user/create(\?.+=.+)*" module="user" action="create" vars="params"/>
+  <route url="/user/([0-9+])(\?.+=.+)*" module="user" action="by_id" vars="id,params"/>
+
 </routes>
