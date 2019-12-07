@@ -47,7 +47,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 
 		protected function create(\Library\HTTPRequest $request)
 		{
-      /*$user = \User::find_by_email(array( \'email\' => $request->postData(\'email\')));
+      /*$user = \\' . $model_class . '::find_by_email(array( \'email\' => $request->postData(\'email\')));
       if ($user) {
           header(\'HTTP/1.1 403 Forbiden\');
           exit(\'Email \' . $request->postData(\'email\') . \' allready exists\');
