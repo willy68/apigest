@@ -52,12 +52,15 @@ class UserController extends \Applications\Frontend\Modules\ApiController
           exit('Email ' . $request->postData('email') . ' allready exists');
       }
 
+	  $pwd = password_hash($request->postData('username') . $request->postData('password'), PASSWORD_BCRYPT, ["cost" => 8]);
+
       $user = new \User();
 
 			$user->set_attributes(array(
     		'entreprise_id' => $request->postData('entreprise_id'),
     		'username' => $request->postData('username'),
     		'email' => $request->postData('email'),
+    		'password' => $pwd,
     		'role' => $request->postData('role')
 			));
 
