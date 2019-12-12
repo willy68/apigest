@@ -242,12 +242,6 @@
   <route url="/role/create(\?.+=.+)*" module="role" action="create" vars="params"/>
   <route url="/role/([0-9+])(\?.+=.+)*" module="role" action="by_id" vars="id,params"/>
 
-  <route url="/roots(\?.+=.+)*" module="role" action="list" vars="params"/>
-  <route url="/root/list(\?.+=.+)*" module="role" action="list" vars="params"/>
-  <route url="/root(\?.+=.+)*" module="role" action="create" vars="params"/>
-  <route url="/root/create(\?.+=.+)*" module="role" action="create" vars="params"/>
-  <route url="/root/([0-9+])(\?.+=.+)*" module="role" action="by_id" vars="id,params"/>
-
   <route url="/entreprise/([0-9]+)/statut_devis/list(\?.+=.+)*" module="statut_devis" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/statut_devis(\?.+=.+)*" module="statut_devis" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/statut_devis/create(\?.+=.+)*" module="statut_devis" action="create" vars="entreprise_id,params"/>
