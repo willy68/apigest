@@ -24,7 +24,7 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
         }
 			} catch (\ActiveRecord\RecordNotFound $e) {
 				header('HTTP/1.1 404 Not Found');
-				$this->page->setOutput('User role not found on this server');
+				$this->page->setOutput('Entreprise not found on this server');
 				return;
 			}
 
@@ -42,11 +42,18 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
 
 		protected function create(\Library\HTTPRequest $request)
 		{
-      $entreprise = \User::find_by_siret(array( 'siret' => $request->postData('siret')));
-      if ($entreprise) {
-          header('HTTP/1.1 403 Forbiden');
-          exit('L\'entreprise ' . $request->postData('siret') . ' allready exists');
-      }
+      try {
+          $entreprise = \Entreprise::find_by_siret(array( 'siret' => $request->postData('siret')));
+          if ($entreprise) {
+              header('HTTP/1.1 403 Forbiden');
+              exit('L\'entreprise ' . $request->postData('siret') . ' allready exists');
+          }
+      } catch (\ActiveRecord\RecordNotFound $e) {
+			} catch (\Exception $e) {
+				header('HTTP/1.1 404 Not Found');
+				$this->page->setOutput('Un problème est survenu, accès à la base de donnée impossible');
+				return;
+			}
 
       $entreprise = new \Entreprise();
 
