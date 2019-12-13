@@ -92,7 +92,7 @@
 
 			$key = file_get_contents(__DIR__."/Crypto/pass_salt.txt");
 
-			$tokenId    = base64_encode(mcrypt_create_iv(32));
+			$tokenId    = base64_encode(random_bytes(32));
 			$issuedAt   = time();
 			$notBefore  = $issuedAt + $nbf;            // Adding 0 seconds
 			$expire     = $notBefore + $exp;           // Adding 900 seconds
