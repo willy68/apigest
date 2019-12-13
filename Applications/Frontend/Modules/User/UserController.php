@@ -148,11 +148,6 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 				exit('User not found on this server');
 			}
 
-			if ($request->getData('entreprise_id') !== $user->entreprise_id) {
-				header('HTTP/1.1 403 Not Forbiden');
-				exit('User is not from this compagny');
-			}
-
 			$token = $this->authenticate($request, $user->username, $user->email, $user->role, $user->password, 900, 0);
 			if ($token) {
 				header('Content-Type: application/json; charset=UTF-8');
