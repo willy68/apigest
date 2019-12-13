@@ -107,10 +107,10 @@
   <route url="/echeance/([0-9+])(\?.+=.+)*" module="echeance" action="by_id" vars="id,params"/>
 
   <route url="/entreprises(\?.+=.+)*" module="entreprise" action="list" vars="params"/>
-  <route url="/entreprise/list(\?.+=.+)*" module="entreprise" action="list" vars="params"/>
-  <route url="/entreprise(\?.+=.+)*" module="entreprise" action="create" vars="params"/>
-  <route url="/entreprise/create(\?.+=.+)*" module="entreprise" action="create" vars="params"/>
-  <route url="/entreprise/([0-9+])(\?.+=.+)*" module="entreprise" action="by_id" vars="id,params"/>
+  <route url="/user/([0-9]+)/entreprise/list(\?.+=.+)*" module="entreprise" action="list" vars="user_id,params"/>
+  <route url="/user/([0-9]+)/entreprise(\?.+=.+)*" module="entreprise" action="create" vars="user_id,params"/>
+  <route url="/user/([0-9]+)/entreprise/create(\?.+=.+)*" module="entreprise" action="create" vars="user_id,params"/>
+  <route url="/user/([0-9]+)/entreprise/([0-9+])(\?.+=.+)*" module="entreprise" action="by_id" vars="user_id,id,params"/>
 
   <route url="/entreprise/([0-9]+)/factures(\?.+=.+)*" module="facture" action="list" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/facture/list(\?.+=.+)*" module="facture" action="list" vars="entreprise_id,params"/>

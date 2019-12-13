@@ -8,6 +8,11 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
 		{
 			$options = array();
 
+			if ($request->getExists('user_id')) {
+				$options['joins'] = array('administrateurs');
+				$options['conditions'] = array("`administrateur`.user_id = ?", $request->getExists('user_id'));
+			}
+
 			if ($request->getExists('limit')) {
 				$options['limit'] = $request->getData('limit');
 			}
