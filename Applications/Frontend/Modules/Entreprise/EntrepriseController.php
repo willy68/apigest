@@ -10,7 +10,8 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
 
 			if ($request->getExists('user_id')) {
 				$options['joins'] = array('administrateurs');
-				$options['conditions'] = array("`administrateur`.user_id = ?", $request->getExists('user_id'));
+				$options['conditions'] = array("`administrateur`.user_id in (?)",
+					array($request->getData('user_id')));
 			}
 
 			if ($request->getExists('limit')) {
@@ -47,6 +48,11 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
 
 		protected function create(\Library\HTTPRequest $request)
 		{
+			if (!$request->getExists('user_id')) {
+				header('HTTP/1.1 400 Bad request');
+				$this->page->setOutput('Aucun utilisateur spécifié pour créer l\'entreprise');
+			}
+
       try {
           $entreprise = \Entreprise::find_by_siret(array( 'siret' => $request->postData('siret')));
           if ($entreprise) {
@@ -80,6 +86,12 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
 
 			if ($entreprise->save())
 			{
+				$admin = new \Administrateur();
+				$admin->set_attributes(array(
+					'user_id' => $_GET['user_id'],
+					'entreprise_id' => $entreprise->id
+				));
+				$admin->save();
 				header ('Content-Type: application/json; charset=UTF-8');
 				$this->page->setOutput($entreprise->to_json());
 			} else {
