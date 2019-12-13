@@ -60,11 +60,10 @@ class UserController extends \Applications\Frontend\Modules\ApiController
       $user = new \User();
 
 			$user->set_attributes(array(
-    		'entreprise_id' => $request->postData('entreprise_id'),
     		'username' => $request->postData('username'),
     		'email' => $request->postData('email'),
     		'password' => $pwd,
-    		'role' => $request->postData('role')
+    		'role' => $request->postData('role') ? $request->postData('role') : 'Admin'
 			));
 
 			if ($user->save())
