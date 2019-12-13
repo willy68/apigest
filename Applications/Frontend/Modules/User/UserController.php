@@ -46,10 +46,13 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 
 		protected function create(\Library\HTTPRequest $request)
 		{
-      $user = \User::find_by_email(array( 'email' => $request->postData('email')));
+      try {
+        $user = \User::find_by_email(array( 'email' => $request->postData('email')));
+			} catch(\ActiveRecord\RecordNotFound $e) {}
+			
       if ($user) {
-          header('HTTP/1.1 403 Forbiden');
-          exit('Email ' . $request->postData('email') . ' allready exists');
+      	header('HTTP/1.1 403 Forbiden');
+      	exit('Email ' . $request->postData('email') . ' allready exists');
       }
 
 	  $pwd = password_hash($request->postData('username') . $request->postData('password'), PASSWORD_BCRYPT, ["cost" => 8]);
