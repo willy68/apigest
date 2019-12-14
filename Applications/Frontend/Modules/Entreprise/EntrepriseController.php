@@ -84,20 +84,27 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
         'logo' => $request->postData('logo')
 			));
 
-			if ($entreprise->save())
-			{
-				$admin = new \Administrateur();
-				$admin->set_attributes(array(
-					'user_id' => $_GET['user_id'],
-					'entreprise_id' => $entreprise->id
-				));
-				$admin->save();
-				header ('Content-Type: application/json; charset=UTF-8');
-				$this->page->setOutput($entreprise->to_json());
-			} else {
-				header('HTTP/1.1 400 Bad request');
-				$this->page->setOutput('400 Bad request');
-			}
+      try {
+          if ($entreprise->save()) {
+              $admin = new \Administrateur();
+              $admin->set_attributes(array(
+                    'user_id' => $request->getData('user_id'),
+                    'entreprise_id' => $entreprise->id
+                ));
+              $admin->save();
+              header('Content-Type: application/json; charset=UTF-8');
+              $this->page->setOutput($entreprise->to_json());
+          } else {
+              header('HTTP/1.1 400 Bad request');
+              $this->page->setOutput('400 Bad request');
+          }
+      } catch (\Exception $e) {
+        if (isset($entreprise->id)) {
+          $entreprise->delete();
+        }
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
 		}
 
 		protected function get(\Library\HTTPRequest $request)
