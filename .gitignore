@@ -53,6 +53,7 @@ Crypto/*
 Applications/Frontend/Config/plugins.ini
 
 # Other
+*.bak
 connect_bd.php
 /generated_models
 /generated_controllers
