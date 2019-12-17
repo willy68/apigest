@@ -145,7 +145,7 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 			$user = \User::find_by_email(array('email' => $request->postData('email')));
 			if (!$user) {
 				header('HTTP/1.1 404 Not Found');
-				exit('User not found on this server');
+				$this->page->setOutput('User not found on this server');
 			}
 
 			$token = $this->authenticate($request, $user->username, $user->email, $user->role, $user->password, 900, 0);
@@ -162,7 +162,7 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 				$this->page->setOutput($json);
 			} else {
 				header('HTTP/1.1 401 Unauthorized');
-				exit('Authentication failed');
+				$this->page->setOutput('Authentication failed');
 			}
 		}
 
