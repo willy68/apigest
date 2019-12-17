@@ -146,6 +146,7 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 			if (!$user) {
 				header('HTTP/1.1 404 Not Found');
 				$this->page->setOutput('User not found on this server');
+				return;
 			}
 
 			$token = $this->authenticate($request, $user->username, $user->email, $user->role, $user->password, 900, 0);
