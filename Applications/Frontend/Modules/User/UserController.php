@@ -139,12 +139,17 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 		if ($request->getExists('entreprise_id')) {
 			$options['joins'] = array('administrateurs');
 			$options['conditions'] = array(
-				"AND `administrateur`.entreprise_id in (?)",
-				array($request->getData('entreprise_id'))
+				"`user`.email = ? AND `administrateur`.entreprise_id = ?",
+				$request->postData('email'),
+				$request->getData('entreprise_id')
 			);
+		} else {
+			$options['conditions'] = array("`user`.email = ?", 
+			$request->postData('email'));
 		}
 
-		$user = \User::find_by_email(array('email' => $request->postData('email')));
+		$user = \User::find($options);
+		// $user = \User::find_by_email(array('email' => $request->postData('email')));
 		if (!$user) {
 			header('HTTP/1.1 404 Not Found');
 			$this->page->setOutput('User not found on this server');
