@@ -51,7 +51,7 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 			} catch(\ActiveRecord\RecordNotFound $e) {}
 			
       if ($user) {
-      	header('HTTP/1.1 403 Forbiden');
+      	header('HTTP/1.1 400 Bad request');
       	exit('Email ' . $request->postData('email') . ' allready exists');
       }
 

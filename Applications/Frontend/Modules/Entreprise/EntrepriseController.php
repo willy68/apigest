@@ -56,7 +56,7 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
       try {
           $entreprise = \Entreprise::find_by_siret(array( 'siret' => $request->postData('siret')));
           if ($entreprise) {
-              header('HTTP/1.1 403 Forbiden');
+              header('HTTP/1.1 400 Bad request');
               exit('L\'entreprise ' . $request->postData('siret') . ' allready exists');
           }
       } catch (\ActiveRecord\RecordNotFound $e) {
