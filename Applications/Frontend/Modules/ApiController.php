@@ -50,7 +50,6 @@ class ApiController extends \Applications\Frontend\BackController
    */
   public function setView($view)
   {
-    
   }
 
   /**
@@ -113,8 +112,9 @@ class ApiController extends \Applications\Frontend\BackController
    * @return void
    */
   protected function getList(\Library\HTTPRequest $request)
-  { }
-  
+  {
+  }
+
   /**
    * Execute l'action 'create' suivant la methode POST
    *
@@ -135,7 +135,8 @@ class ApiController extends \Applications\Frontend\BackController
    * @return void
    */
   protected function create(\Library\HTTPRequest $request)
-  { }
+  {
+  }
 
   /**
    * Test si l'utilisateur peut executer les actions
@@ -175,7 +176,8 @@ class ApiController extends \Applications\Frontend\BackController
    * @return void
    */
   protected function get(\Library\HTTPRequest $request)
-  { }
+  {
+  }
 
   /**
    * Mise à jour d'un enregistrement par son id
@@ -184,7 +186,8 @@ class ApiController extends \Applications\Frontend\BackController
    * @return void
    */
   protected function update(\Library\HTTPRequest $request)
-  { }
+  {
+  }
 
   /**
    * Detruit un enregistrement par son id
@@ -193,5 +196,6 @@ class ApiController extends \Applications\Frontend\BackController
    * @return void
    */
   protected function delete(\Library\HTTPRequest $request)
-  { }
+  {
+  }
 }
