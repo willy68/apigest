@@ -326,7 +326,7 @@
   <route url="/entreprise/([0-9]+)/user/create(\?.+=.+)*" module="user" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/user/([0-9]+)" module="user" action="by_id" vars="entreprise_id,id"/>
 
-  <route url="/user/login" module="user" action="login" vars="entreprise_id"/>
+  <route url="/user/login(\?.+=.+)*" module="user" action="login" vars="params"/>
   <route url="/users(\?.+=.+)*" module="user" action="list" vars="params"/>
   <route url="/user/list(\?.+=.+)*" module="user" action="list" vars="params"/>
   <route url="/user(\?.+=.+)*" module="user" action="create" vars="params"/>
