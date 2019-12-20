@@ -46,9 +46,27 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 
 	protected function create(\Library\HTTPRequest $request)
 	{
+	// A voir!! *******************************
+		/* $options = array();
+		if ($request->getExists('entreprise_id')) {
+			$options['joins'] = array('administrateurs');
+			$options['conditions'] = array(
+				"`user`.email = ? AND `administrateur`.entreprise_id = ?",
+				$request->postData('email'),
+				$request->getData('entreprise_id')
+			);
+		} else {
+			$options['conditions'] = array("`user`.email = ?", 
+			$request->postData('email'));
+		}*/
+
 		try {
 			$user = \User::find_by_email(array('email' => $request->postData('email')));
 		} catch (\ActiveRecord\RecordNotFound $e) {
+		} catch (\Exception $e) {
+			header('HTTP/1.1 404 Not Found');
+			$this->page->setOutput('Un problème est survenu, accès à la base de donnée impossible');
+			return;
 		}
 
 		if ($user) {
@@ -68,6 +86,12 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 		));
 
 		if ($user->save()) {
+		  $admin = new \Administrateur();
+			$admin->set_attributes(array(
+				'user_id' => $request->getData('entreprise_id'),
+				'entreprise_id' => $user->id
+			));
+			$admin->save();
 			header('Content-Type: application/json; charset=UTF-8');
 			$this->page->setOutput($user->to_json());
 		} else {
