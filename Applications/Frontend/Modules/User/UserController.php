@@ -160,6 +160,9 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 	public function executeLogin(\Library\HTTPRequest $request)
 	{
 		$options = array();
+		/*SELECT `user`.* FROM `user`
+		INNER JOIN `administrateur` ON(`administrateur`.user_id = `user`.id)
+		WHERE `administrateur`.`entreprise_id` = $request->getData('entreprise_id') AND `user`.`email` = $request->postData('email')*/
 		if ($request->getExists('entreprise_id')) {
 			$options['joins'] = array('administrateurs');
 			$options['conditions'] = array(
