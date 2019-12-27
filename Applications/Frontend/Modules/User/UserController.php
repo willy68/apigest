@@ -10,7 +10,7 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 		$options = array();
 
 		if ($request->getExists('id')) {
-			$options['entreprise_id'] = $request->getData('entreprise_id');
+			$options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
 		}
 
 		if ($request->getExists('limit')) {
@@ -86,12 +86,14 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 		));
 
 		if ($user->save()) {
-		  $admin = new \Administrateur();
-			$admin->set_attributes(array(
-				'user_id' => $request->getData('entreprise_id'),
-				'entreprise_id' => $user->id
-			));
-			$admin->save();
+			if ($request->getExists('entreprise_id') && $request->getData('entreprise_id') !== null) {
+				$admin = new \Administrateur();
+				$admin->set_attributes(array(
+					'user_id' => $user->id,
+					'entreprise_id' => $request->getData('entreprise_id')
+				));
+				$admin->save();
+			}
 			header('Content-Type: application/json; charset=UTF-8');
 			$this->page->setOutput($user->to_json());
 		} else {
