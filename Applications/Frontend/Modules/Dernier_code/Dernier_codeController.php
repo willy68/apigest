@@ -9,10 +9,6 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
   {
     $options = array();
 
-    if ($request->getExists('id')) {
-      $options['entreprise_id'] = $request->getData('entreprise_id');
-    }
-
     if ($request->getExists('limit')) {
       $options['limit'] = $request->getData('limit');
     }
@@ -54,12 +50,12 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
 
     $dernier_code = new \Dernier_code();
 
-    $dernier_code->set_attributes(array(/*
-    'table_nom' => $request->postData('table_nom'),
-    'colonne' => $request->postData('colonne'),
-    'code_table' => $request->postData('code_table'),
-    'prochain_code' => $request->postData('prochain_code')
-*/));
+    $dernier_code->set_attributes(array(
+      'table_nom' => $request->postData('table_nom'),
+      'colonne' => $request->postData('colonne'),
+      'code_table' => $request->postData('code_table'),
+      'prochain_code' => $request->postData('prochain_code')
+    ));
 
     if ($dernier_code->save()) {
       header('Content-Type: application/json; charset=UTF-8');
@@ -74,6 +70,22 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
   {
     try {
       $dernier_code = \Dernier_code::find($request->getData('id'));
+    } catch (\ActiveRecord\RecordNotFound $e) {
+      header('HTTP/1.1 404 Not Found');
+      $this->page->setOutput('Dernier_code not found on this server');
+      return;
+    }
+
+    $json = $dernier_code->to_json();
+
+    header('Content-Type: application/json; charset=UTF-8');
+    $this->page->setOutput($json);
+  }
+
+  protected function getLastbytablenom(\Library\HTTPRequest $request)
+  {
+    try {
+      $dernier_code = \Dernier_code::last($request->getData('table_nom'));
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Dernier_code not found on this server');

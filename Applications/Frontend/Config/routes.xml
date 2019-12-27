@@ -77,6 +77,7 @@
   <route url="/entreprise/([0-9]+)/dernier_code(\?.+=.+)*" module="dernier_code" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/dernier_code/create(\?.+=.+)*" module="dernier_code" action="create" vars="entreprise_id,params"/>
   <route url="/entreprise/([0-9]+)/dernier_code/([0-9]+)" module="dernier_code" action="by_id" vars="entreprise_id,id"/>
+  <route url="/entreprise/([0-9]+)/dernier_code/([0-9a-zA-Z_]+)" module="dernier_code" action="lastbytablenom" vars="entreprise_id,table_nom"/>
 
   <route url="/dernier_codes(\?.+=.+)*" module="dernier_code" action="list" vars="params"/>
   <route url="/dernier_code/list(\?.+=.+)*" module="dernier_code" action="list" vars="params"/>
