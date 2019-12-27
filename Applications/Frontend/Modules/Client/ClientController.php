@@ -8,8 +8,8 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
 		{
 			$options = array();
 
-			if ($request->getExists('id')) {
-			  $options['entreprise_id'] = $request->getData('entreprise_id');
+			if ($request->getExists('entreprise_id')) {
+			  $options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
 			}
 
 			if ($request->getExists('limit')) {
@@ -46,26 +46,25 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
 
 		protected function create(\Library\HTTPRequest $request)
 		{
-      /*$user = \User::find_by_email(array( 'email' => $request->postData('email')));
-      if ($user) {
+      $client = \Client::find_by_code_client(array( 'code_client' => $request->postData('code_client')));
+      if ($client) {
           header('HTTP/1.1 403 Forbiden');
-          exit('Email ' . $request->postData('email') . ' allready exists');
-      }*/
+          exit('Code client ' . $request->postData('code_client') . ' allready exists');
+      }
 
       $client = new \Client();
 
-			$client->set_attributes(array(/*
-    'entreprise_id' => $request->postData('entreprise_id'),
-    'code_client' => $request->postData('code_client'),
-    'civilite' => $request->postData('civilite'),
-    'nom' => $request->postData('nom'),
-    'prenom' => $request->postData('prenom'),
-    'tel' => $request->postData('tel'),
-    'portable' => $request->postData('portable'),
-    'email' => $request->postData('email'),
-    'tva_intracom' => $request->postData('tva_intracom')
-*/
-							));
+    $client->set_attributes(array(
+      'entreprise_id' => $request->postData('entreprise_id'),
+      'code_client' => $request->postData('code_client'),
+      'civilite' => $request->postData('civilite'),
+      'nom' => $request->postData('nom'),
+      'prenom' => $request->postData('prenom'),
+      'tel' => $request->postData('tel'),
+      'portable' => $request->postData('portable'),
+      'email' => $request->postData('email'),
+      'tva_intracom' => $request->postData('tva_intracom')
+    ));
 
 			if ($client->save())
 			{
