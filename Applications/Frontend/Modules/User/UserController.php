@@ -9,9 +9,13 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 	{
 		$options = array();
 
-		if ($request->getExists('id')) {
-			$options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
-		}
+    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
+      $options['joins'] = array('administrateurs');
+      $options['conditions'] = array(
+        "`administrateur`.entreprise_id in (?)",
+        array($request->getData('entreprise_id'))
+      );
+    }
 
 		if ($request->getExists('limit')) {
 			$options['limit'] = $request->getData('limit');

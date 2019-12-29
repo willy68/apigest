@@ -9,6 +9,10 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
   {
     $options = array();
 
+		if ($request->getExists('entreprise_id')) {
+			$options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
+		}
+
     if ($request->getExists('limit')) {
       $options['limit'] = $request->getData('limit');
     }
@@ -84,11 +88,25 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
 
   protected function getLastbytablenom(\Library\HTTPRequest $request)
   {
+    if (!$request->getExists('table_nom') && !$request->getData('table_nom')) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('No table name specified, bad request');
+    }
+
+    $options = array();
+
+		if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
+      $options['conditions'] = array('entreprise_id = ? AND table_nom = ?', 
+      $request->getData('entreprise_id'), $request->getData('table_nom'));
+		} else {
+      $options['conditions'] = array('table_nom = ?', $request->getData('table_nom'));
+    }
+
     try {
-      $dernier_code = \Dernier_code::last($request->getData('table_nom'));
+      $dernier_code = \Dernier_code::last($options);
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('Dernier_code not found on this server');
+      $this->page->setOutput('Dernier_code for this table name not found on this server');
       return;
     }
 
