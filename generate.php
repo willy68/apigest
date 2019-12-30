@@ -313,7 +313,7 @@ class {$model_class}Controller extends \Applications\\{$app}\BackController
       $this->saveController($table, $file);
     } else {
       exit("Option <table> ou <t> manquante ex:" . $this->nl .
-      "./generate m=controller t=user" . $this->nl);
+        "./generate m=controller t=user" . $this->nl);
     }
   }
 
@@ -371,7 +371,7 @@ class {$model_class}Controller extends \Applications\\{$app}\BackController
       $this->saveFile($model . "</routes>", $filename);
     } else {
       exit("Option <table> ou <t> manquante ex:" . $this->nl .
-      "./generate m=route t=user" . $this->nl);
+        "./generate m=route t=user" . $this->nl);
     }
   }
 
