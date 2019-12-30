@@ -88,12 +88,14 @@ class EntrepriseController extends \Applications\Frontend\Modules\ApiController
 
     try {
       if ($entreprise->save()) {
-        $admin = new \Administrateur();
-        $admin->set_attributes(array(
-          'user_id' => $request->getData('user_id'),
-          'entreprise_id' => $entreprise->id
-        ));
-        $admin->save();
+        if ($request->getExists('user_id') && $request->getData('user_id')) {
+          $admin = new \Administrateur();
+          $admin->set_attributes(array(
+            'user_id' => $request->getData('user_id'),
+            'entreprise_id' => $entreprise->id
+          ));
+          $admin->save();
+        }
         header('Content-Type: application/json; charset=UTF-8');
         $this->page->setOutput($entreprise->to_json());
       } else {
