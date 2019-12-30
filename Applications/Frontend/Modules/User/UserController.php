@@ -9,13 +9,13 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 	{
 		$options = array();
 
-    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
-      $options['joins'] = array('administrateurs');
-      $options['conditions'] = array(
-        "`administrateur`.entreprise_id in (?)",
-        array($request->getData('entreprise_id'))
-      );
-    }
+		if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
+			$options['joins'] = array('administrateurs');
+			$options['conditions'] = array(
+				"`administrateur`.entreprise_id in (?)",
+				array($request->getData('entreprise_id'))
+			);
+		}
 
 		if ($request->getExists('limit')) {
 			$options['limit'] = $request->getData('limit');
@@ -48,9 +48,20 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 		$this->page->setOutput($json);
 	}
 
+	/**
+   * Test si l'utilisateur peut créer un enregistrement de la table user
+   * par la methode POST
+   *
+   * @param \Library\HTTPRequest $request
+   * @return void
+   */
+  public function beforeCreate(\Library\HTTPRequest $request)
+  {
+	}
+	
 	protected function create(\Library\HTTPRequest $request)
 	{
-	// A voir!! *******************************
+		// A voir!! *******************************
 		/* $options = array();
 		if ($request->getExists('entreprise_id')) {
 			$options['joins'] = array('administrateurs');
@@ -177,8 +188,10 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 				$request->getData('entreprise_id')
 			);
 		} else {
-			$options['conditions'] = array("`user`.email = ?", 
-			$request->postData('email'));
+			$options['conditions'] = array(
+				"`user`.email = ?",
+				$request->postData('email')
+			);
 		}
 
 		$user = \User::find($options);

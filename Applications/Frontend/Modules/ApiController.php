@@ -116,6 +116,21 @@ class ApiController extends \Applications\Frontend\BackController
   }
 
   /**
+   * Test si l'utilisateur peut créer un enregistrement de la table user
+   * par la methode POST
+   *
+   * @param \Library\HTTPRequest $request
+   * @return void
+   */
+  public function beforeCreate(\Library\HTTPRequest $request)
+  {
+    //Test if user can list table records with token
+    if ($this->method === 'POST') {
+      $this->authenticated();
+    }
+  }
+
+  /**
    * Execute l'action 'create' suivant la methode POST
    *
    * @param \Library\HTTPRequest $request
