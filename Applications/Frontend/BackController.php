@@ -55,7 +55,7 @@ abstract class BackController extends \Library\Controller
 	protected function isAuthorized()
 	{
 		if ($this->jwt) {
-			require_once __DIR__ . '/../../Library/Jwt/jwt.php'; // no autoload!
+			require_once __DIR__ . '/../../src/Jwt/jwt.php'; // no autoload!
 			$key = file_get_contents(__DIR__ . "/Crypto/pass_salt.txt");
 			try {
 				$payload = \JWT::decode($this->jwt, $key);
