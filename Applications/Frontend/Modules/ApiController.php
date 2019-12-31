@@ -14,7 +14,7 @@ class ApiController extends \Applications\Frontend\BackController
    * 
    * @var boolean
    */
-  protected $checkAuth = false;
+  protected $checkAuth = true;
 
   /**
    * Change la variable checkAuth

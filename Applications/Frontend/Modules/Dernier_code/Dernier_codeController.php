@@ -9,9 +9,9 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
   {
     $options = array();
 
-		if ($request->getExists('entreprise_id')) {
-			$options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
-		}
+    if ($request->getExists('entreprise_id')) {
+      $options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
+    }
 
     if ($request->getExists('limit')) {
       $options['limit'] = $request->getData('limit');
@@ -95,10 +95,12 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
 
     $options = array();
 
-		if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
-      $options['conditions'] = array('entreprise_id = ? AND table_nom = ?', 
-      $request->getData('entreprise_id'), $request->getData('table_nom'));
-		} else {
+    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
+      $options['conditions'] = array(
+        'entreprise_id = ? AND table_nom = ?',
+        $request->getData('entreprise_id'), $request->getData('table_nom')
+      );
+    } else {
       $options['conditions'] = array('table_nom = ?', $request->getData('table_nom'));
     }
 
