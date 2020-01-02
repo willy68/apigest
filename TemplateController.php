@@ -29,7 +29,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
         }
 			} catch (\ActiveRecord\RecordNotFound $e) {
 				header(\'HTTP/1.1 404 Not Found\');
-				$this->page->setOutput(\'' . $model_name . ' role not found on this server\');
+				$this->page->setOutput(\'' . $model_class . ' role not found on this server\');
 				return;
 			}
 
@@ -109,7 +109,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				$this->page->setOutput(\'400 Bad request\');
 			}
 		}
-		
+
 		protected function delete(\Library\HTTPRequest $request)
 		{
 			$id = $request->getData(\'id\');
@@ -130,7 +130,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 			} else {
 				header(\'HTTP/1.1 400 Bad request\');
 				$this->page->setOutput(\'400 Bad request\');
-			}			
+			}
 		}
 
 	}
