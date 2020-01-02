@@ -29,7 +29,7 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
       }
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('User role not found on this server');
+      $this->page->setOutput('Civilite not found on this server');
       return;
     }
 
@@ -46,24 +46,24 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
 
   protected function create(\Library\HTTPRequest $request)
   {
-    /*$user = \User::find_by_email(array( 'email' => $request->postData('email')));
-      if ($user) {
-          header('HTTP/1.1 403 Forbiden');
-          exit('Email ' . $request->postData('email') . ' allready exists');
-      }*/
-
     $civilite = new \Civilite();
 
-    $civilite->set_attributes(array(/*
-    'libelle' => $request->postData('libelle')
-*/));
+    $civilite->set_attributes(array(
+      'entreprise_id' => $request->postData('entreprise_id'),
+      'libelle' => $request->postData('libelle')
+    ));
 
-    if ($civilite->save()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($civilite->to_json());
-    } else {
+    try {
+      if ($civilite->save()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($civilite->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer la civilité');
     }
   }
 
@@ -94,12 +94,18 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
       $this->page->setOutput('Civilite not found on this server');
       return;
     }
-    if ($civilite->update_attributes($request->post())) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($civilite->to_json());
-    } else {
+
+    try {
+      if ($civilite->update_attributes($request->post())) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($civilite->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de sauvegarder la civilité');
     }
   }
 
@@ -115,12 +121,17 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
       return;
     }
 
-    if ($civilite->delete()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($civilite->to_json());
-    } else {
+    try {
+      if ($civilite->delete()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($civilite->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de supprimer la civilité');
     }
   }
 }

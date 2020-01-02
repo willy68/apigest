@@ -31,8 +31,11 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				header(\'HTTP/1.1 404 Not Found\');
 				$this->page->setOutput(\'' . $model_class . ' not found on this server\');
 				return;
-			}
-
+      } catch (\ActiveRecord\ActiveRecordException $e) {
+        header(\'HTTP/1.1 400 Bad request\');
+        $this->page->setOutput(\'Un problème est survenu, impossible d\'avoir la liste de '. $model_name .'\');
+      }
+  
 			if (empty($' . $model_name . 's))
 			{
 				header(\'HTTP/1.1 404 Not Found\');
@@ -56,7 +59,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
       $' . $model_name . ' = new \\' . $model_class . '();
 
 			$' . $model_name . '->set_attributes(array(/*' . "\n"
-  . $attributes . '*/
+    . $attributes . '*/
 							));
 
       try {
@@ -68,7 +71,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
           header(\'HTTP/1.1 400 Bad request\');
           $this->page->setOutput(\'400 Bad request\');
         }
-      } catch (\ActiveRecord\DatabaseException $e) {
+      } catch (\ActiveRecord\ActiveRecordException $e) {
         header(\'HTTP/1.1 400 Bad request\');
         $this->page->setOutput(\'Un problème est survenu, impossible d\'enregistrer le ' . $model_name . '\');
       }
@@ -84,7 +87,11 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				header(\'HTTP/1.1 404 Not Found\');
 				$this->page->setOutput(\'' . $model_class . ' not found on this server\');
 				return;
-			}
+      } catch (\ActiveRecord\ActiveRecordException $e) {
+        header(\'HTTP/1.1 400 Bad request\');
+        $this->page->setOutput(\'Un problème est survenu, impossible de récuperer le ' . $model_name . '\');
+        return;
+      }
 
 			$json = $' . $model_name . '->to_json();
 
@@ -104,15 +111,21 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				header(\'HTTP/1.1 404 Not Found\');
 				$this->page->setOutput(\'' . $model_class . ' not found on this server\');
 				return;
-			}
-			if ($' . $model_name . '->update_attributes($request->post()))
-			{
-				header ( \'Content-Type: application/json; charset=UTF-8\' );
-				$this->page->setOutput($' . $model_name . '->to_json());
-			} else {
-				header(\'HTTP/1.1 400 Bad request\');
-				$this->page->setOutput(\'400 Bad request\');
-			}
+      }
+      
+      try {
+        if ($' . $model_name . '->update_attributes($request->post()))
+        {
+          header ( \'Content-Type: application/json; charset=UTF-8\' );
+          $this->page->setOutput($' . $model_name . '->to_json());
+        } else {
+          header(\'HTTP/1.1 400 Bad request\');
+          $this->page->setOutput(\'400 Bad request\');
+        }
+      } catch (\ActiveRecord\ActiveRecordException $e) {
+        header(\'HTTP/1.1 400 Bad request\');
+        $this->page->setOutput(\'Un problème est survenu, impossible de sauvegarder le ' . $model_name . '\');
+      }
 		}
 
 		protected function delete(\Library\HTTPRequest $request)
@@ -128,14 +141,19 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				$this->page->setOutput(\'' . $model_class . ' not found on this server\');
 				return;
 			}
-			
-			if ($' . $model_name . '->delete()) {
-				header ( \'Content-Type: application/json; charset=UTF-8\' );
-				$this->page->setOutput($' . $model_name . '->to_json());
-			} else {
-				header(\'HTTP/1.1 400 Bad request\');
-				$this->page->setOutput(\'400 Bad request\');
-			}
+
+      try {
+        if ($' . $model_name . '->delete()) {
+          header ( \'Content-Type: application/json; charset=UTF-8\' );
+          $this->page->setOutput($' . $model_name . '->to_json());
+        } else {
+          header(\'HTTP/1.1 400 Bad request\');
+          $this->page->setOutput(\'400 Bad request\');
+        }
+      } catch (\ActiveRecord\ActiveRecordException $e) {
+        header(\'HTTP/1.1 400 Bad request\');
+        $this->page->setOutput(\'Un problème est survenu, impossible de supprimer le ' . $model_name . '\');
+      }
 		}
 
 	}

@@ -46,15 +46,10 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
 
   protected function create(\Library\HTTPRequest $request)
   {
-    /*$user = \User::find_by_email(array( 'email' => $request->postData('email')));
-      if ($user) {
-          header('HTTP/1.1 403 Forbiden');
-          exit('Email ' . $request->postData('email') . ' allready exists');
-      }*/
-
     $dernier_code = new \Dernier_code();
 
     $dernier_code->set_attributes(array(
+      'entreprise_id' => $request->postData('entreprise_id'),
       'table_nom' => $request->postData('table_nom'),
       'colonne' => $request->postData('colonne'),
       'code_table' => $request->postData('code_table'),
