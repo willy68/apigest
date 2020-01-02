@@ -35,7 +35,7 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
 
     if (empty($clients)) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('Aucunes clients trouvées sur ce serveur');
+      $this->page->setOutput('Aucuns clients trouvés sur ce serveur');
       return;
     }
 
@@ -67,12 +67,17 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
       'tva_intracom' => $request->postData('tva_intracom')
     ));
 
-    if ($client->save()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($client->to_json());
-    } else {
+    try {
+      if ($client->save()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($client->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le client');
     }
   }
 

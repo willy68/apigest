@@ -59,14 +59,19 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
   . $attributes . '*/
 							));
 
-			if ($' . $model_name . '->save())
-			{
-				header (\'Content-Type: application/json; charset=UTF-8\');
-				$this->page->setOutput($' . $model_name . '->to_json());
-			} else {
-				header(\'HTTP/1.1 400 Bad request\');
-				$this->page->setOutput(\'400 Bad request\');
-			}
+      try {
+        if ($' . $model_name . '->save())
+        {
+          header (\'Content-Type: application/json; charset=UTF-8\');
+          $this->page->setOutput($' . $model_name . '->to_json());
+        } else {
+          header(\'HTTP/1.1 400 Bad request\');
+          $this->page->setOutput(\'400 Bad request\');
+        }
+      } catch (\ActiveRecord\DatabaseException $e) {
+        header(\'HTTP/1.1 400 Bad request\');
+        $this->page->setOutput(\'Un problème est survenu, impossible d\'enregistrer le ' . $model_name . '\');
+      }
 		}
 
 		protected function get(\Library\HTTPRequest $request)
