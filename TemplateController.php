@@ -9,7 +9,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 		{
 			$options = array();
 
-			if ($request->getExists(\'id\')) {
+			if ($request->getExists(\'entreprise_id\') && $request->getData(\'entreprise_id\')) {
 			  $options[\'entreprise_id\'] = $request->getData(\'entreprise_id\');
 			}
 
@@ -29,7 +29,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
         }
 			} catch (\ActiveRecord\RecordNotFound $e) {
 				header(\'HTTP/1.1 404 Not Found\');
-				$this->page->setOutput(\'User role not found on this server\');
+				$this->page->setOutput(\'' . $model_name . ' role not found on this server\');
 				return;
 			}
 
@@ -56,7 +56,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
       $' . $model_name . ' = new \\' . $model_class . '();
 
 			$' . $model_name . '->set_attributes(array(/*' . "\n"
-	. $attributes . '*/
+  . $attributes . '*/
 							));
 
 			if ($' . $model_name . '->save())
