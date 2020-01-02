@@ -25,7 +25,7 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
       }
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('User role not found on this server');
+      $this->page->setOutput('Adresse_type not found on this server');
       return;
     }
 
@@ -59,7 +59,7 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
       }
     } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le client');
+      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le type d\'adresse');
     }
   }
 

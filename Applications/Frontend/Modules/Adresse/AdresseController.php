@@ -45,7 +45,7 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
       }
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('User role not found on this server');
+      $this->page->setOutput('Adresse not found on this server');
       return;
     }
 

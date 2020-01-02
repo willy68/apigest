@@ -29,13 +29,13 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
       }
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('User role not found on this server');
+      $this->page->setOutput('Dernier_code not found on this server');
       return;
     }
 
     if (empty($dernier_codes)) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('Aucunes dernier_codes trouvées sur ce serveur');
+      $this->page->setOutput('Aucunes dernier_codes trouvés sur ce serveur');
       return;
     }
 
