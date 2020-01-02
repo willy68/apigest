@@ -31,6 +31,10 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Civilite not found on this server');
       return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer la civilité');
+      return;
     }
 
     if (empty($civilites)) {
@@ -61,7 +65,7 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
         header('HTTP/1.1 400 Bad request');
         $this->page->setOutput('400 Bad request');
       }
-    } catch (\ActiveRecord\DatabaseException $e) {
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer la civilité');
     }
@@ -74,6 +78,10 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Civilite not found on this server');
+      return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer la civilité');
       return;
     }
 
@@ -103,7 +111,7 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
         header('HTTP/1.1 400 Bad request');
         $this->page->setOutput('400 Bad request');
       }
-    } catch (\ActiveRecord\DatabaseException $e) {
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('Un problème est survenu, impossible de sauvegarder la civilité');
     }
@@ -129,7 +137,7 @@ class CiviliteController extends \Applications\Frontend\Modules\ApiController
         header('HTTP/1.1 400 Bad request');
         $this->page->setOutput('400 Bad request');
       }
-    } catch (\ActiveRecord\DatabaseException $e) {
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('Un problème est survenu, impossible de supprimer la civilité');
     }

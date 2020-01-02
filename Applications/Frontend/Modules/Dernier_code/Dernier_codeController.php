@@ -105,6 +105,10 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Dernier_code for this table name not found on this server');
       return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer le dernier code');
+      return;
     }
 
     $json = $dernier_code->to_json();

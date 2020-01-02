@@ -47,6 +47,10 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Adresse not found on this server');
       return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer la liste d\'adresses');
+      return;
     }
 
     if (empty($adresses)) {
@@ -93,7 +97,7 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
         header('HTTP/1.1 400 Bad request');
         $this->page->setOutput('400 Bad request');
       }
-    } catch (\ActiveRecord\DatabaseException $e) {
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer l\'adresse');
     }
@@ -106,6 +110,10 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Adresse not found on this server');
+      return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer l\'adresse');
       return;
     }
 

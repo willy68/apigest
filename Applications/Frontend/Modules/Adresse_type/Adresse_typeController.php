@@ -27,6 +27,10 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Adresse_type not found on this server');
       return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer la liste de type d\'adresse');
+      return;
     }
 
     if (empty($adresse_types)) {
@@ -57,7 +61,7 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
         header('HTTP/1.1 400 Bad request');
         $this->page->setOutput('400 Bad request');
       }
-    } catch (\ActiveRecord\DatabaseException $e) {
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le type d\'adresse');
     }
@@ -70,6 +74,10 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Adresse_type not found on this server');
+      return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer le type d\'adresse');
       return;
     }
 
@@ -93,16 +101,16 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
 
     try {
       if ($adresse_type->update_attributes($request->post())) {
-          header('Content-Type: application/json; charset=UTF-8');
-          $this->page->setOutput($adresse_type->to_json());
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($adresse_type->to_json());
       } else {
-          header('HTTP/1.1 400 Bad request');
-          $this->page->setOutput('400 Bad request');
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
       }
-    } catch (\ActiveRecord\DatabaseException $e) {
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('Un problème est survenu, impossible de sauvegarder le type d\'adresse');
-    }  
+    }
   }
 
   protected function delete(\Library\HTTPRequest $request)
@@ -117,12 +125,18 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
       return;
     }
 
-    if ($adresse_type->delete()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($adresse_type->to_json());
-    } else {
+    try {
+      if ($adresse_type->delete()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($adresse_type->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de supprimer le type d\'adresse');
+      return;
     }
   }
 }
