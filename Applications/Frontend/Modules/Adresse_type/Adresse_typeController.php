@@ -9,10 +9,6 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
   {
     $options = array();
 
-    if ($request->getExists('id')) {
-      $options['entreprise_id'] = $request->getData('entreprise_id');
-    }
-
     if ($request->getExists('limit')) {
       $options['limit'] = $request->getData('limit');
     }

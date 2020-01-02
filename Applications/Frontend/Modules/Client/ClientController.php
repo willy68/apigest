@@ -9,7 +9,7 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
   {
     $options = array();
 
-    if ($request->getExists('entreprise_id')) {
+    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
       $options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
     }
 

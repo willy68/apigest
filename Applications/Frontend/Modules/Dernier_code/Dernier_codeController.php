@@ -9,7 +9,7 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
   {
     $options = array();
 
-    if ($request->getExists('entreprise_id')) {
+    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
       $options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
     }
 

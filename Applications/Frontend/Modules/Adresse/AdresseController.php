@@ -9,8 +9,8 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
   {
     $options = array();
 
-    if ($request->getExists('id')) {
-      $options['entreprise_id'] = $request->getData('entreprise_id');
+    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
+      $options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
     }
 
     if ($request->getExists('limit')) {
