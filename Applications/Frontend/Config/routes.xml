@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <routes>
-  <route url="/entreprise/([0-9]+)/adresses(\?.+=.+)*" module="adresse" action="list" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/adresse/list(\?.+=.+)*" module="adresse" action="list" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/adresse(\?.+=.+)*" module="adresse" action="create" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/adresse/create(\?.+=.+)*" module="adresse" action="create" vars="entreprise_id,params"/>
-  <route url="/entreprise/([0-9]+)/adresse/([0-9]+)" module="adresse" action="by_id" vars="entreprise_id,id"/>
+  <route url="/client/([0-9]+)/adresses(\?.+=.+)*" module="adresse" action="list" vars="client_id,params"/>
+  <route url="/client/([0-9]+)/adresse/list(\?.+=.+)*" module="adresse" action="list" vars="client_id,params"/>
+  <route url="/client/([0-9]+)/adresse(\?.+=.+)*" module="adresse" action="create" vars="client_id,params"/>
+  <route url="/client/([0-9]+)/adresse/create(\?.+=.+)*" module="adresse" action="create" vars="client_id,params"/>
+  <route url="/client/([0-9]+)/adresse/([0-9]+)" module="adresse" action="by_id" vars="client_id,id"/>
 
   <route url="/adresses(\?.+=.+)*" module="adresse" action="list" vars="params"/>
   <route url="/adresse/list(\?.+=.+)*" module="adresse" action="list" vars="params"/>
