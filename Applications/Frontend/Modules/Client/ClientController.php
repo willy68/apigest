@@ -48,8 +48,9 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
   {
     $client = \Client::find_by_code_client(array('code_client' => $request->postData('code_client')));
     if ($client) {
-      header('HTTP/1.1 403 Forbiden');
-      exit('Code client ' . $request->postData('code_client') . ' allready exists');
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Code client ' . $request->postData('code_client') . ' allready exists');
+      return;
     }
 
     $client = new \Client();
