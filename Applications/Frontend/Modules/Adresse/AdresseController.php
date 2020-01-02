@@ -8,9 +8,25 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
   protected function getList(\Library\HTTPRequest $request)
   {
     $options = array();
+    $conditions = array();
 
-    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
-      $options['conditions'] = array('entreprise_id = ?', $request->getData('entreprise_id'));
+    if ($request->getExists('client_id') && $request->getData('client_id')) {
+      $conditions = array('client_id = ?', $request->getData('client_id'));
+    }
+
+    if ($request->getExists('adresse_type_id') && $request->getExists('adresse_type_id')) {
+      if (!empty($conditions)) {
+        $conditions = array(
+          'client_id = ? AND adresse_type_id = ?',
+          $request->getData('client_id'), $request->getData('adresse_type_id')
+        );
+      } else {
+        $conditions = array('adresse_type_id = ?', $request->getData('adresse_type_id'));
+      }
+    }
+
+    if (!empty($conditions)) {
+      $options['conditions'] = $conditions;
     }
 
     if ($request->getExists('limit')) {
@@ -46,31 +62,40 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
 
   protected function create(\Library\HTTPRequest $request)
   {
-    /*$user = \User::find_by_email(array( 'email' => $request->postData('email')));
-      if ($user) {
-          header('HTTP/1.1 403 Forbiden');
-          exit('Email ' . $request->postData('email') . ' allready exists');
-      }*/
+    if (!$request->postExists('client_id') && !$request->postData('client_id')) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Il faut specifier l\'id du client, opération impossible');
+    }
+
+    if (!$request->postExists('adresse_type_id') && !$request->postData('adresse_type_id')) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Il faut specifier l\'id du type d\'adresse, opération impossible');
+    }
 
     $adresse = new \Adresse();
 
-    $adresse->set_attributes(array(/*
-    'client_id' => $request->postData('client_id'),
-    'adresse_1' => $request->postData('adresse_1'),
-    'adresse_2' => $request->postData('adresse_2'),
-    'adresse_3' => $request->postData('adresse_3'),
-    'cp' => $request->postData('cp'),
-    'ville' => $request->postData('ville'),
-    'pays' => $request->postData('pays'),
-    'adresse_type_id' => $request->postData('adresse_type_id')
-*/));
+    $adresse->set_attributes(array(
+      'client_id' => $request->postData('client_id'),
+      'adresse_1' => $request->postData('adresse_1'),
+      'adresse_2' => $request->postData('adresse_2'),
+      'adresse_3' => $request->postData('adresse_3'),
+      'cp' => $request->postData('cp'),
+      'ville' => $request->postData('ville'),
+      'pays' => $request->postData('pays'),
+      'adresse_type_id' => $request->postData('adresse_type_id')
+    ));
 
-    if ($adresse->save()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($adresse->to_json());
-    } else {
+    try {
+      if ($adresse->save()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($adresse->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le client');
     }
   }
 
@@ -92,7 +117,7 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
 
   protected function update(\Library\HTTPRequest $request)
   {
-    $id = $request->getData('id');
+    $id = $request->postData('id');
 
     try {
       $adresse = \Adresse::find($id);
@@ -101,12 +126,18 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
       $this->page->setOutput('Adresse not found on this server');
       return;
     }
-    if ($adresse->update_attributes($request->post())) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($adresse->to_json());
-    } else {
+
+    try {
+      if ($adresse->update_attributes($request->post())) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($adresse->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Impossible de sauvegarder l\'adresse!');
     }
   }
 
@@ -122,12 +153,17 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
       return;
     }
 
-    if ($adresse->delete()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($adresse->to_json());
-    } else {
+    try {
+      if ($adresse->delete()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($adresse->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Impossible de supprimer l\'adresse!');
     }
   }
 }
