@@ -29,7 +29,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
         }
 			} catch (\ActiveRecord\RecordNotFound $e) {
 				header(\'HTTP/1.1 404 Not Found\');
-				$this->page->setOutput(\'' . $model_class . ' role not found on this server\');
+				$this->page->setOutput(\'' . $model_class . ' not found on this server\');
 				return;
 			}
 
