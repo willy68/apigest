@@ -33,7 +33,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
 				return;
       } catch (\ActiveRecord\ActiveRecordException $e) {
         header(\'HTTP/1.1 400 Bad request\');
-        $this->page->setOutput(\'Un problème est survenu, impossible d\'avoir la liste de '. $model_name .'\');
+        $this->page->setOutput(\'Un problème est survenu, impossible d\\\'avoir la liste de '. $model_name .'\');
         return;
       }
   
@@ -74,7 +74,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
         }
       } catch (\ActiveRecord\ActiveRecordException $e) {
         header(\'HTTP/1.1 400 Bad request\');
-        $this->page->setOutput(\'Un problème est survenu, impossible d\'enregistrer le ' . $model_name . '\');
+        $this->page->setOutput(\'Un problème est survenu, impossible d\\\'enregistrer le ' . $model_name . '\');
       }
 		}
 
