@@ -49,12 +49,17 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
       'libelle' => $request->postData('libelle')
     ));
 
-    if ($adresse_type->save()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($adresse_type->to_json());
-    } else {
+    try {
+      if ($adresse_type->save()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($adresse_type->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le client');
     }
   }
 
@@ -85,13 +90,19 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
       $this->page->setOutput('Adresse_type not found on this server');
       return;
     }
-    if ($adresse_type->update_attributes($request->post())) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($adresse_type->to_json());
-    } else {
+
+    try {
+      if ($adresse_type->update_attributes($request->post())) {
+          header('Content-Type: application/json; charset=UTF-8');
+          $this->page->setOutput($adresse_type->to_json());
+      } else {
+          header('HTTP/1.1 400 Bad request');
+          $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
-    }
+      $this->page->setOutput('Un problème est survenu, impossible de sauvegarder le type d\'adresse');
+    }  
   }
 
   protected function delete(\Library\HTTPRequest $request)
