@@ -95,7 +95,7 @@ class AdresseController extends \Applications\Frontend\Modules\ApiController
       }
     } catch (\ActiveRecord\DatabaseException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le client');
+      $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer l\'adresse');
     }
   }
 

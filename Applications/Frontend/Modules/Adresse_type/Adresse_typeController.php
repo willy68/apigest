@@ -42,18 +42,12 @@ class Adresse_typeController extends \Applications\Frontend\Modules\ApiControlle
 
   protected function create(\Library\HTTPRequest $request)
   {
-    /*$user = \User::find_by_email(array( 'email' => $request->postData('email')));
-      if ($user) {
-          header('HTTP/1.1 403 Forbiden');
-          exit('Email ' . $request->postData('email') . ' allready exists');
-      }*/
-
     $adresse_type = new \Adresse_type();
 
-    $adresse_type->set_attributes(array(/*
-    'code' => $request->postData('code'),
-    'libelle' => $request->postData('libelle')
-*/));
+    $adresse_type->set_attributes(array(
+      'code' => $request->postData('code'),
+      'libelle' => $request->postData('libelle')
+    ));
 
     if ($adresse_type->save()) {
       header('Content-Type: application/json; charset=UTF-8');
