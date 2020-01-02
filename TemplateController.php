@@ -34,6 +34,7 @@ class ' . $model_class . 'Controller extends \Applications\\' . $app . '\Modules
       } catch (\ActiveRecord\ActiveRecordException $e) {
         header(\'HTTP/1.1 400 Bad request\');
         $this->page->setOutput(\'Un problème est survenu, impossible d\'avoir la liste de '. $model_name .'\');
+        return;
       }
   
 			if (empty($' . $model_name . 's))

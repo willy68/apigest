@@ -31,6 +31,10 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Client not found on this server');
       return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de lister les clients');
+      return;
     }
 
     if (empty($clients)) {
@@ -55,19 +59,19 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
 
     $client = new \Client();
 
-    $client->set_attributes(array(
-      'entreprise_id' => $request->postData('entreprise_id'),
-      'code_client' => $request->postData('code_client'),
-      'civilite' => $request->postData('civilite'),
-      'nom' => $request->postData('nom'),
-      'prenom' => $request->postData('prenom'),
-      'tel' => $request->postData('tel'),
-      'portable' => $request->postData('portable'),
-      'email' => $request->postData('email'),
-      'tva_intracom' => $request->postData('tva_intracom')
-    ));
-
     try {
+      $client->set_attributes(array(
+        'entreprise_id' => $request->postData('entreprise_id'),
+        'code_client' => $request->postData('code_client'),
+        'civilite' => $request->postData('civilite'),
+        'nom' => $request->postData('nom'),
+        'prenom' => $request->postData('prenom'),
+        'tel' => $request->postData('tel'),
+        'portable' => $request->postData('portable'),
+        'email' => $request->postData('email'),
+        'tva_intracom' => $request->postData('tva_intracom')
+      ));
+
       if ($client->save()) {
         header('Content-Type: application/json; charset=UTF-8');
         $this->page->setOutput($client->to_json());
@@ -75,7 +79,7 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
         header('HTTP/1.1 400 Bad request');
         $this->page->setOutput('400 Bad request');
       }
-    } catch (\ActiveRecord\DatabaseException $e) {
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('Un problème est survenu, impossible d\'enregistrer le client');
     }
@@ -89,7 +93,12 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
       header('HTTP/1.1 404 Not Found');
       $this->page->setOutput('Client not found on this server');
       return;
+    } catch (\ActiveRecord\ActiveRecordException $e) {
+      header('HTTP/1.1 400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de récuperer le client');
+      return;
     }
+
 
     $json = $client->to_json();
 
@@ -108,13 +117,19 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
       $this->page->setOutput('Client not found on this server');
       return;
     }
-    if ($client->update_attributes($request->post())) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($client->to_json());
-    } else {
+
+    try {
+      if ($client->update_attributes($request->post())) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($client->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
-    }
+      $this->page->setOutput('Un problème est survenu, impossible de sauvegarder le client');
+    }  
   }
 
   protected function delete(\Library\HTTPRequest $request)
@@ -129,12 +144,18 @@ class ClientController extends \Applications\Frontend\Modules\ApiController
       return;
     }
 
-    if ($client->delete()) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($client->to_json());
-    } else {
+    try {
+      if ($client->delete()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->page->setOutput($client->to_json());
+      } else {
+        header('HTTP/1.1 400 Bad request');
+        $this->page->setOutput('400 Bad request');
+      }
+    } catch (\ActiveRecord\ActiveRecordException $e) {
       header('HTTP/1.1 400 Bad request');
-      $this->page->setOutput('400 Bad request');
+      $this->page->setOutput('Un problème est survenu, impossible de supprimer le client');
+      return;
     }
   }
 }
