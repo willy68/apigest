@@ -81,7 +81,7 @@ class Dernier_codeController extends \Applications\Frontend\Modules\ApiControlle
     $this->page->setOutput($json);
   }
 
-  protected function getLastbytablenom(\Library\HTTPRequest $request)
+  public function executeLastbytablenom(\Library\HTTPRequest $request)
   {
     if (!$request->getExists('table_nom') && !$request->getData('table_nom')) {
       header('HTTP/1.1 400 Bad request');
