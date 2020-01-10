@@ -2,20 +2,17 @@
 
 namespace Applications\Frontend\Modules\User;
 
-class UserController extends \Applications\Frontend\Modules\ApiController
+class CpvilleController extends \Applications\Frontend\Modules\ApiController
 {
+
+  public function beforeList(\Library\HTTPRequest $request)
+  {
+
+  }
 
   protected function getList(\Library\HTTPRequest $request)
   {
     $options = array();
-
-    if ($request->getExists('entreprise_id') && $request->getData('entreprise_id')) {
-      $options['joins'] = array('administrateurs');
-      $options['conditions'] = array(
-        "`administrateur`.entreprise_id in (?)",
-        array($request->getData('entreprise_id'))
-      );
-    }
 
     if ($request->getExists('limit')) {
       $options['limit'] = $request->getData('limit');
@@ -27,23 +24,23 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 
     try {
       if (!empty($options)) {
-        $users = \User::all($options);
+        $cpville = \Cpville::all($options);
       } else {
-        $users = \User::all();
+        $cpville = \Cpville::all();
       }
     } catch (\ActiveRecord\RecordNotFound $e) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('User role not found on this server');
+      $this->page->setOutput('Villes not found on this server');
       return;
     }
 
-    if (empty($users)) {
+    if (empty($cpville)) {
       header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('Aucunes users trouvées sur ce serveur');
+      $this->page->setOutput('Aucunes villes trouvées sur ce serveur');
       return;
     }
 
-    $json = $this->jsonArray($users);
+    $json = $this->jsonArray($cpville);
     header('Content-Type: application/json; charset=UTF-8');
     $this->page->setOutput($json);
   }
@@ -61,60 +58,64 @@ class UserController extends \Applications\Frontend\Modules\ApiController
 
   protected function create(\Library\HTTPRequest $request)
   {
-    // A voir!! *******************************
-    /* $options = array();
-		if ($request->getExists('entreprise_id')) {
-			$options['joins'] = array('administrateurs');
-			$options['conditions'] = array(
-				"`user`.email = ? AND `administrateur`.entreprise_id = ?",
-				$request->postData('email'),
-				$request->getData('entreprise_id')
-			);
-		} else {
-			$options['conditions'] = array("`user`.email = ?", 
-			$request->postData('email'));
-		}*/
+    $cpville = new \Cpville();
 
-    try {
-      $user = \User::find_by_email(array('email' => $request->postData('email')));
-    } catch (\ActiveRecord\RecordNotFound $e) {
-    } catch (\Exception $e) {
-      header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('Un problème est survenu, accès à la base de donnée impossible');
-      return;
-    }
-
-    if ($user) {
-      header('HTTP/1.1 400 Bad request');
-      exit('Email ' . $request->postData('email') . ' allready exists');
-    }
-
-    $pwd = password_hash($request->postData('username') . $request->postData('password'), PASSWORD_BCRYPT, ["cost" => 8]);
-
-    $user = new \User();
-
-    $user->set_attributes(array(
-      'username' => $request->postData('username'),
-      'email' => $request->postData('email'),
-      'password' => $pwd,
-      'role' => $request->postData('role') ? $request->postData('role') : 'Admin'
+    $cpville->set_attributes(array(
+      'CP' => $request->postData('CP'),
+      'VILLE' => $request->postData('VILLE')
     ));
 
-    if ($user->save()) {
-      if ($request->getExists('entreprise_id') && $request->getData('entreprise_id') !== null) {
-        $admin = new \Administrateur();
-        $admin->set_attributes(array(
-          'user_id' => $user->id,
-          'entreprise_id' => $request->getData('entreprise_id')
-        ));
-        $admin->save();
-      }
+    if ($cpville->save()) {
       header('Content-Type: application/json; charset=UTF-8');
-      $this->page->setOutput($user->to_json());
+      $this->page->setOutput($cpville->to_json());
     } else {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('400 Bad request');
     }
+  }
+
+  public function beforeSearch(\Library\HTTPRequest $request)
+  {
+
+  }
+
+  public function executeSearch(\Library\HTTPRequest $request)
+  {
+    $options = array();
+
+    if ($request->getExists('limit')) {
+      $options['limit'] = $request->getData('limit');
+    }
+
+    if ($request->getExists('order')) {
+      $options['order'] = $request->getData('order');
+    }
+
+    if ($request->getExists('search')) {
+      $options['conditions'] = '%'.$request->getExists('search').'%';
+    }
+
+    try {
+      if (!empty($options)) {
+        $cpville = \Cpville::all($options);
+      } else {
+        $cpville = \Cpville::all();
+      }
+    } catch (\ActiveRecord\RecordNotFound $e) {
+      header('HTTP/1.1 404 Not Found');
+      $this->page->setOutput('Villes not found on this server');
+      return;
+    }
+
+    if (empty($cpville)) {
+      header('HTTP/1.1 404 Not Found');
+      $this->page->setOutput('Aucunes villes trouvées sur ce serveur');
+      return;
+    }
+
+    $json = $this->jsonArray($cpville);
+    header('Content-Type: application/json; charset=UTF-8');
+    $this->page->setOutput($json);
   }
 
   protected function get(\Library\HTTPRequest $request)
@@ -171,52 +172,6 @@ class UserController extends \Applications\Frontend\Modules\ApiController
     } else {
       header('HTTP/1.1 400 Bad request');
       $this->page->setOutput('400 Bad request');
-    }
-  }
-
-  public function executeLogin(\Library\HTTPRequest $request)
-  {
-    $options = array();
-    /*SELECT `user`.* FROM `user`
-		INNER JOIN `administrateur` ON(`administrateur`.user_id = `user`.id)
-		WHERE `administrateur`.`entreprise_id` = $request->getData('entreprise_id') AND `user`.`email` = $request->postData('email')*/
-    if ($request->getExists('entreprise_id')) {
-      $options['joins'] = array('administrateurs');
-      $options['conditions'] = array(
-        "`user`.email = ? AND `administrateur`.entreprise_id = ?",
-        $request->postData('email'),
-        $request->getData('entreprise_id')
-      );
-    } else {
-      $options['conditions'] = array(
-        "`user`.email = ?",
-        $request->postData('email')
-      );
-    }
-
-    $user = \User::find($options);
-    // $user = \User::find_by_email(array('email' => $request->postData('email')));
-    if (!$user) {
-      header('HTTP/1.1 404 Not Found');
-      $this->page->setOutput('User not found on this server');
-      return;
-    }
-
-    $token = $this->authenticate($request, $user->username, $user->email, $user->role, $user->password, 900, 0);
-    if ($token) {
-      header('Content-Type: application/json; charset=UTF-8');
-      $userJwt = [
-        'id' => $user->id,
-        'username' => $user->username,
-        'email' => $user->email,
-        'role' => $user->role,
-        'token' => $token
-      ];
-      $json = json_encode($userJwt);
-      $this->page->setOutput($json);
-    } else {
-      header('HTTP/1.1 401 Unauthorized');
-      $this->page->setOutput('Authentication failed');
     }
   }
 }
