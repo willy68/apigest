@@ -334,4 +334,6 @@
   <route url="/user/create(\?.+=.+)*" module="user" action="create" vars="params"/>
   <route url="/user/([0-9+])(\?.+=.+)*" module="user" action="by_id" vars="id,params"/>
 
+  <route url="/cpville/search/(.+)(\?.+=.+)*" module="cpville" action="search" vars="search,params"/>
+
 </routes>

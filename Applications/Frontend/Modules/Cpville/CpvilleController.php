@@ -92,7 +92,7 @@ class CpvilleController extends \Applications\Frontend\Modules\ApiController
     }
 
     if ($request->getExists('search')) {
-      $options['conditions'] = '%'.$request->getExists('search').'%';
+      $options['conditions'] = array('CP = ?', '%'.$request->getExists('search').'%');
     }
 
     try {
