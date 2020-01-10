@@ -31,7 +31,7 @@
 				$directories = $this->cfg['directories'];
 			}
 			else {
-				$directories = array(__DIR__.'/../../Library/Models');
+				$directories = array(__DIR__.'/../../src/Models');
 			}
 
 			\ActiveRecord\Config::initialize(function($cfg) use ($connections, $directories){
