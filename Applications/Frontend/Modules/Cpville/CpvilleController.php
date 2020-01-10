@@ -1,6 +1,6 @@
 <?php
 
-namespace Applications\Frontend\Modules\User;
+namespace Applications\Frontend\Modules\Cpville;
 
 class CpvilleController extends \Applications\Frontend\Modules\ApiController
 {
