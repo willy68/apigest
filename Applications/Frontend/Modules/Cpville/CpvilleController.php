@@ -83,6 +83,12 @@ class CpvilleController extends \Applications\Frontend\Modules\ApiController
   {
     $options = array();
 
+    $col = 'cp';
+
+    if ($request->getExists('ville')) {
+      $col = 'ville';
+    }
+
     if ($request->getExists('limit')) {
       $options['limit'] = $request->getData('limit');
     }
@@ -92,7 +98,7 @@ class CpvilleController extends \Applications\Frontend\Modules\ApiController
     }
 
     if ($request->getExists('search')) {
-      $options['conditions'] = array('CP = ?', '%'.$request->getExists('search').'%');
+      $options['conditions'] = array($col.' LIKE ?', $request->getData('search').'%');
     }
 
     try {
