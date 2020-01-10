@@ -21,6 +21,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 -- --------------------------------------------------------
 
+DROP TABLE IF EXISTS `communes`.`cp_autocomplete` ;
 --
 -- Structure de la table `cp_autocomplete`
 --
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `cp_autocomplete` (
   KEY `CODEPAYS` (`CODEPAYS`),
   KEY `CP` (`CP`),
   KEY `VILLE` (`VILLE`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 --
 -- Contenu de la table `cp_autocomplete`
