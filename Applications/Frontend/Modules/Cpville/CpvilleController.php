@@ -81,6 +81,61 @@ class CpvilleController extends \Applications\Frontend\Modules\ApiController
 
   public function executeSearch(\Library\HTTPRequest $request)
   {
+    if ($this->method === 'GET') {
+      $this->getSearch($request);
+    } elseif ($this->method === 'POST') {
+      $this->postSearch($request);
+    }
+
+  }
+
+  protected function getSearch(\Library\HTTPRequest $request)
+  {
+    $options = array();
+
+    $col = 'cp';
+
+    if ($request->getExists('ville')) {
+      $col = 'ville';
+    }
+
+    if ($request->getExists('limit')) {
+      $options['limit'] = $request->getData('limit');
+    }
+
+    if ($request->getExists('order')) {
+      $options['order'] = $request->getData('order');
+    }
+
+    if ($request->getExists('search')) {
+      $options['conditions'] = array($col.' LIKE ?', $request->getData('search').'%');
+    }
+
+    try {
+      if (!empty($options)) {
+        $cpville = \Cpville::all($options);
+      } else {
+        $cpville = \Cpville::all();
+      }
+    } catch (\ActiveRecord\RecordNotFound $e) {
+      header('HTTP/1.1 404 Not Found');
+      $this->page->setOutput('Villes not found on this server');
+      return;
+    }
+
+    if (empty($cpville)) {
+      header('HTTP/1.1 404 Not Found');
+      $this->page->setOutput('Aucunes villes trouvées sur ce serveur');
+      return;
+    }
+
+    $json = $this->jsonArray($cpville);
+    header('Content-Type: application/json; charset=UTF-8');
+    $this->page->setOutput($json);
+  }
+
+  protected function postSearch(\Library\HTTPRequest $request)
+  {
     $options = array();
 
     $col = 'cp';
