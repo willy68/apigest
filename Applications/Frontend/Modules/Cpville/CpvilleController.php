@@ -152,8 +152,8 @@ class CpvilleController extends \Applications\Frontend\Modules\ApiController
       $options['order'] = $request->getData('order');
     }
 
-    if ($request->getExists('search')) {
-      $options['conditions'] = array($col.' LIKE ?', $request->getData('search').'%');
+    if ($request->postExists('search')) {
+      $options['conditions'] = array($col.' LIKE ?', $request->postData('search').'%');
     }
 
     try {
