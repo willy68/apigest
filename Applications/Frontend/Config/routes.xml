@@ -334,8 +334,8 @@
   <route url="/user/create(\?.+=.+)*" module="user" action="create" vars="params"/>
   <route url="/user/([0-9]+)(\?.+=.+)*" module="user" action="by_id" vars="id,params"/>
 
-  <route url="/cpville/search/(cp)/(\?.+=.+)*" module="cpville" action="search" vars="cp,params"/>
-  <route url="/cpville/search/(ville)/(\?.+=.+)*" module="cpville" action="search" vars="ville,params"/>
+  <route url="/cpville/search/(cp)(\?.+=.+)*" module="cpville" action="search" vars="cp,params"/>
+  <route url="/cpville/search/(ville)(\?.+=.+)*" module="cpville" action="search" vars="ville,params"/>
   <route url="/cpville/search/(cp)/([0-9]+)(\?.+=.+)*" module="cpville" action="search" vars="cp,search,params"/>
   <route url="/cpville/search/(ville)/([^\?]+)(\?.+=.+)*" module="cpville" action="search" vars="ville,search,params"/>
 
