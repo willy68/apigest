@@ -42,8 +42,8 @@ et un contenu dans la variable $content du layout s'il existe
         			throw new ViewException('Le layout spécifié n\'existe pas');
         		}
             	ob_start();
-                require $this->layout;
-				$output = ob_get_clean();
+              require $this->layout;
+							$output = ob_get_clean();
             	return $output;
             }
             

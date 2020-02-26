@@ -9,7 +9,7 @@
 
 		public function loadCfg()
 		{
-			$file = __DIR__.'/../Applications/'.$this->app()->name().'/Config/plugins.ini';
+			$file = dirname(__DIR__) . '/Applications/'.$this->app()->name().'/Config/plugins.ini';
 			$cfg = $this->app()->config()->parseIniFile($file);
 
 			if($cfg) {
@@ -38,7 +38,7 @@
 		public function loadPlugin($plugin)
 		{
 			if (!is_string($plugin) || empty($plugin)) {
-				throw new InvalidArgumentException('Le plugin spécifié est invalide');
+				throw new \InvalidArgumentException('Le plugin spécifié est invalide');
 			}
 
 			if(!$this->pluginsCfg)
@@ -60,7 +60,7 @@
 		public function getPlugin($plugin)
 		{
 			if (!is_string($plugin) || empty($plugin)) {
-				throw new InvalidArgumentException('Le plugin spécifié est invalide');
+				throw new \InvalidArgumentException('Le plugin spécifié est invalide');
 			}
 
 			if (!isset($this->plugins[$plugin])) {

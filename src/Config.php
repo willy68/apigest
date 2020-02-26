@@ -12,7 +12,7 @@
 			if (!$this->vars)
 			{
 				$xml = new \DOMDocument;
-				$xml->load(__DIR__.'/../Applications/'.$this->app()->name().'/Config/app.xml');
+				$xml->load(dirname(__DIR__) . '/Applications/'.$this->app()->name().'/Config/app.xml');
 
 				$elements = $xml->getElementsByTagName('define');
 
@@ -95,7 +95,7 @@
 		}
 
 		public function addIniFile($file, $defaultDir = true) {
-			if ($defaultDir) $file = __DIR__.'/../Applications/'.$this->app()->name().'/Config/'.$file;
+			if ($defaultDir) $file = dirname(__DIR__) . '/Applications/'.$this->app()->name().'/Config/'.$file;
 			if (file_exists($file)  && !in_array($file, $this->iniFile)) {
 				$this->iniFile[] = $file;
 			}

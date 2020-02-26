@@ -1,6 +1,6 @@
 <?php
 	namespace Library\Plugin;
-	require_once __DIR__.'/../ActiveRecord/ActiveRecord.php';
+	require_once dirname(__DIR__) . '/ActiveRecord/ActiveRecord.php';
 
 	class PluginActiveRecord extends AbstractPlugin
 	{
@@ -29,9 +29,15 @@
 			}
 			if (isset($this->cfg['directories'])) {
 				$directories = $this->cfg['directories'];
+				$directories = array_map(function ($directorie){
+					return dirname(dirname(__DIR__)) . $directorie;
+				}, $directories);
 			}
 			else {
-				$directories = array(__DIR__.'/../../src/Models');
+				$directories = array(dirname(
+					dirname(__DIR__)) . '/src/Models',
+					dirname(dirname(__DIR__)) . '/Applications/Models'
+				);
 			}
 
 			\ActiveRecord\Config::initialize(function($cfg) use ($connections, $directories){

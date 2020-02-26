@@ -43,7 +43,7 @@
 			{
 				if ($this->createCache() && $this->cache->cacheExists()) {
 					if ($this->app()->user()->getAttribute('newid') === true) {
-						$this->cache->cleanAll(__DIR__.'/../Applications/'.$this->app()->name().'/Cache/Views');
+						$this->cache->cleanAll(dirname(__DIR__) . '/Applications/'.$this->app()->name().'/Cache/Views');
 						$this->app()->user()->setAttribute('newid', false);
 					}
 					else if ($this->cache->checkLifetime()) {
@@ -99,7 +99,7 @@
 			if (!in_array($this->action, $this->excludeCacheViews))
 			{
 				$lifetime = (int)$this->app()->config()->getIniVar('cache', 'cache.lifetime');
-				$file = __DIR__.'/../Applications/'.$this->app()->name().'/Cache/Views/'
+				$file = dirname(__DIR__) . '/Applications/'.$this->app()->name().'/Cache/Views/'
 						.ucfirst($this->app()->name()).ucfirst($this->module).ucfirst($this->action).
 						implode('_', $this->app()->httpRequest()->get()).'.html';
 
@@ -142,6 +142,6 @@
 
 			$this->view = $view;
 
-			$this->page->setContentFile(__DIR__.'/../Applications/'.$this->app()->name().'/Modules/'.$this->module.'/Views/'.$this->view.'.php');
+			$this->page->setContentFile(dirname(__DIR__) . '/Applications/'.$this->app()->name().'/Modules/'.$this->module.'/Views/'.$this->view.'.php');
 		}
 	} 

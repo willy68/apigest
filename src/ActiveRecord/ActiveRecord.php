@@ -40,7 +40,7 @@ namespace ActiveRecord;
 
 use \Closure;
 
-define('LIBRARY', '..' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR);
+define('LIBRARY', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 
 function classify($class_name, $singularize=false)
 {

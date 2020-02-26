@@ -50,7 +50,7 @@
 			$router = new \Library\Router;
 
 			$xml = new \DOMDocument;
-			$xml->load(__DIR__.'/../Applications/'.$this->name.'/Config/routes.xml');
+			$xml->load(dirname(__DIR__) . '/Applications/'.$this->name.'/Config/routes.xml');
 
 			$routes = $xml->getElementsByTagName('route');
 

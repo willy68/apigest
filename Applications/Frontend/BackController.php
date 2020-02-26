@@ -36,7 +36,7 @@ abstract class BackController extends \Library\Controller
   {
     //Refresh token if exists in headers!
     if ($this->jwt) {
-      require_once __DIR__ . '/../../src/Jwt/jwt.php';
+      require_once dirname(dirname(__DIR__)) . '/src/Jwt/jwt.php';
       $key = file_get_contents(__DIR__ . "/Crypto/pass_salt.txt");
       try {
         $jwt = \JWT::refreshToken($this->jwt, $key, 900);
@@ -55,7 +55,7 @@ abstract class BackController extends \Library\Controller
   protected function isAuthorized()
   {
     if ($this->jwt) {
-      require_once __DIR__ . '/../../src/Jwt/jwt.php'; // no autoload!
+      require_once dirname(dirname(__DIR__)) . '/src/Jwt/jwt.php'; // no autoload!
       $key = file_get_contents(__DIR__ . "/Crypto/pass_salt.txt");
       try {
         $payload = \JWT::decode($this->jwt, $key);
@@ -84,7 +84,7 @@ abstract class BackController extends \Library\Controller
   protected function createJwt($username, $email, $role, $exp = 900, $nbf = 0)
   {
     $jwt = null;
-    require_once __DIR__ . '/../../src/Jwt/jwt.php'; // no autoload!
+    require_once dirname(dirname(__DIR__)) . '/src/Jwt/jwt.php'; // no autoload!
 
     $key = file_get_contents(__DIR__ . "/Crypto/pass_salt.txt");
 
