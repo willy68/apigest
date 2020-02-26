@@ -35,7 +35,7 @@
 
 			if (is_callable(array($this, 'before')))
 			{
-				$this->before($this->app()->httpRequest());
+				call_user_func_array(array($this, 'before'), array($this->app()->httpRequest()));
 			}
 
 			// Cache
@@ -69,7 +69,7 @@
 
 			if (is_callable(array($this, 'after')))
 			{
-				$this->after($this->app()->httpRequest());
+				call_user_func_array(array($this, 'after'), array($this->app()->httpRequest()));
 			}
 
 			// Cache
